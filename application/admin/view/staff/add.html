@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加技师</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="/admin/x-admin2/css/font.css">
+    <link rel="stylesheet" href="/admin/x-admin2/css/xadmin.css">
+    <link rel="stylesheet" href="/admin/x-admin2/css/xadmin.css">
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/admin/x-admin2/lib/layui/layui.js"></script>
+    <script type="text/javascript" src="/admin/x-admin2/js/xadmin.js"></script>
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]--></head>
+    <style>
+        .layui1-upload-file{
+            display: none;
+        }
+        .layui-upload-list{
+            float: left;
+            margin-right: 5px;
+
+        }
+        .layui-upload-list img{
+            width: 90px;
+        }
+    </style>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://lib.h-ui.net/jquery.form/3.51.0/jquery.form.min.js"></script>
+<body>
+<form id="myForm" action="/admin/staff" method="post" class="layui-form" enctype="multipart/form-data">
+    <div class="layui-form-item">
+        <label for="name" class="layui-form-label">
+            <span class="x-red">*</span>姓名</label>
+        <div class="layui-input-inline">
+            <input type="text" id="name" name="name" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+    </div>
+    <div class="layui-form-item">
+        <label for="nickname" class="layui-form-label">
+            <span class="x-red">*</span>昵称</label>
+        <div class="layui-input-inline">
+            <input type="text" id="nickname" name="nickname" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+    </div>
+    <div class="layui-form-item">
+        <label for="iphone" class="layui-form-label">
+            <span class="x-red">*</span>接单手机号</label>
+        <div class="layui-input-inline">
+            <input type="text" id="iphone" name="iphone" required="" l autocomplete="off" class="layui-input"></div>
+    </div>
+    <div class="layui-form-item">
+        <label for="status" class="layui-form-label">
+            <span class="x-red">*</span>接单状态</label>
+        <div class="layui-input-block">
+            <input type="checkbox" id="status" name="status" checked="checked" lay-skin="switch" lay-text="开启|关闭">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="s_time" class="layui-form-label">
+            <span class="x-red">*</span>接单时间段</label>
+        <div class="layui-input-inline">
+            <input class="layui-input"  autocomplete="off" name="s_time" id="s_time">
+        </div>
+        <div class="layui-input-inline">
+            <input class="layui-input"  autocomplete="off" name="e_time" id="e_time">
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            <span class="x-red">*</span></div>
+    </div>
+    <div class="layui-form-item">
+        <label for="desc" class="layui-form-label">个人简介</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容" id="desc" name="desc" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">服务时间</label>
+        <div class="layui-input-block">
+            <input type="checkbox" checked="checked" name="monday" value="1" title="周一" />
+            <input type="checkbox" checked="checked" name="tuesday" value="1" title="周二" />
+            <input type="checkbox" checked="checked" name="wednesday" value="1" title="周三" />
+            <input type="checkbox" checked="checked" name="thursday" value="1" title="周四" />
+            <input type="checkbox" checked="checked" name="friday" value="1" title="周五" />
+            <input type="checkbox" checked="checked" name="saturday" value="1" title="周六" />
+            <input type="checkbox" checked="checked" name="sunday" value="1" title="周日" />
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户照片</label>
+        <div class="layui-input-block">
+            <div class="layui-upload">
+                <button type="button" class="layui-btn" id="pic_1">
+                    <i class="layui-icon">&#xe67c;</i>半身工装照
+                </button>
+                <button type="button" class="layui-btn" id="pic_2">
+                    <i class="layui-icon">&#xe67c;</i>身份证照片
+                </button>
+                <button type="button" class="layui-btn" id="pic_3">
+                    <i class="layui-icon">&#xe67c;</i>手持身份证
+                </button>
+                <button type="button" class="layui-btn" id="pic_4">
+                    <i class="layui-icon">&#xe67c;</i>从业资格证
+                </button>
+                <button type="button" class="layui-btn" id="pic_5">
+                    <i class="layui-icon">&#xe67c;</i>健康证
+                </button>
+                <input class="layui-btn" type="hidden" name="pic_1" value="">
+                <input class="layui-btn" type="hidden" name="pic_2" value="">
+                <input class="layui-btn" type="hidden" name="pic_3" value="">
+                <input class="layui-btn" type="hidden" name="pic_4" value="">
+                <input class="layui-btn" type="hidden" name="pic_5" value="">
+                <div class="upimg">
+                    <div class="layui-upload-list">
+                        <img class="layui-upload-img" id="pic_1msg" >
+                        <img class="layui-upload-img" id="pic_2msg" >
+                        <img class="layui-upload-img" id="pic_3msg" >
+                        <img class="layui-upload-img" id="pic_4msg" >
+                        <img class="layui-upload-img" id="pic_5msg" >
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit"  class="layui-btn" lay-filter="add" lay-submit="">
+                增加
+            </button>
+            <!--            <button class="layui1-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                        <button type="reset" class="layui1-btn layui1-btn-primary">重置</button>-->
+        </div>
+    </div>
+</form>
+<script>layui.use(['form','layer','laydate','form','jquery','upload'],
+    function() {
+        var form = layui.form,
+            layer = layui.layer;
+        var laydate = layui.laydate;
+
+        var upload = layui.upload;
+        var uploadInst = upload.render({
+            elem: '#pic_1'
+            ,url: '/admin/files/upload'
+            ,field:'pic'
+            ,done: function(data){
+                //上传完毕回调
+                console.log(data)
+                $(" input[ name='pic_1' ] ").val(data.src)
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#pic_1msg').attr('src', result); //图片链接（base64）
+                });
+            }
+        });
+        var uploadInst = upload.render({
+            elem: '#pic_2'
+            ,url: '/admin/files/upload'
+            ,field:'pic'
+            ,done: function(data){
+                //上传完毕回调
+                console.log(data)
+                $(" input[ name='pic_2' ] ").val(data.src)
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#pic_2msg').attr('src', result); //图片链接（base64）
+                });
+            }
+        });
+        var uploadInst = upload.render({
+            elem: '#pic_3'
+            ,url: '/admin/files/upload'
+            ,field:'pic'
+            ,done: function(data){
+                //上传完毕回调
+                console.log(data)
+                $(" input[ name='pic_3' ] ").val(data.src)
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#pic_3msg').attr('src', result); //图片链接（base64）
+                });
+            }
+        });
+        var uploadInst = upload.render({
+            elem: '#pic_4'
+            ,url: '/admin/files/upload'
+            ,field:'pic'
+            ,done: function(data){
+                //上传完毕回调
+                console.log(data)
+                $(" input[ name='pic_4' ] ").val(data.src)
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#pic_4msg').attr('src', result); //图片链接（base64）
+                });
+            }
+        });
+        var uploadInst = upload.render({
+            elem: '#pic_5'
+            ,url: '/admin/files/upload'
+            ,field:'pic'
+            ,done: function(data){
+                //上传完毕回调
+                console.log(data)
+                $(" input[ name='pic_4' ] ").val(data.src)
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#pic_4msg').attr('src', result); //图片链接（base64）
+                });
+            }
+        });
+
+        laydate.render({
+            elem: '#s_time', //指定元素
+            type:'time'
+            ,value: '08:00:00'
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#e_time', //指定元素
+            type:'time'
+            ,value: '20:00:00'
+        });
+
+        form.on('submit(add)', function(data){
+
+            $('#myForm').ajaxForm(function(res) {
+                console.log(res);
+                if(res.err==0){
+                    alert('添加成功')
+                    window.close();
+                    window.parent.location.replace('/admin/staff');
+                }else{
+                    alert('添加失败')
+                }
+                window.close();
+                window.parent.location.replace('/admin/staff');
+            });
+
+        });
+    });</script>
+</body>
+</html>
