@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="/admin/x-admin2/lib/layui/css/layui.css"  media="all">
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
     <script type="text/javascript" src="/admin/x-admin2/js/xadmin.js"></script>
+    <style>
+        .layui-table-cell{
+            text-align:center;
+            height: auto;
+            white-space: normal;
+        }
+
+    </style>
 </head>
 <body>
 <div class="layui-tab-title site-demo-title">
@@ -34,6 +42,10 @@
 <div class="layui-btn-group" id="addSatff" style="display:none;">
     <button type="button" class="layui-btn" lay-event="add">增加</button>
 </div>
+<div type="text/html" id="titleTpl" style="display: none;">
+    <img id="pic" style="width: 120px;position: relative;"  src="/uploads/project/20191216/5becbaeab2e4020e4d48a863cc0531c0.jpg" />
+</div>
+
 <table class="layui-hide" id="userTable" lay-filter="userTable"></table>
 <script src="/admin/x-admin2/lib/layui/layui.js" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
@@ -60,7 +72,7 @@
 
             cols:[[
                 {field:'st_id',title:'ID'},
-                {field:'pic_1',title:'工装照'},
+                {field:'pic_1',title:'工装照',templet: '#titleTpl'},
                 {field:'name',title:'姓名'},
                 {field:'nickname',title:'昵称'},
                 {field:'iphone',title:'接单手机号'},

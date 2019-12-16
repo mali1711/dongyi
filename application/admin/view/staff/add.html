@@ -109,7 +109,7 @@
                     <i class="layui-icon">&#xe67c;</i>从业资格证
                 </button>
                 <button type="button" class="layui-btn" id="pic_5">
-                    <i class="layui-icon">&#xe67c;</i>健康证
+                    <i class="layui-icon">&#xe67c;</i>你的健康证
                 </button>
                 <input class="layui-btn" type="hidden" name="pic_1" value="">
                 <input class="layui-btn" type="hidden" name="pic_2" value="">
@@ -136,6 +136,7 @@
 
     <div class="layui-form-item">
         <div class="layui-input-block">
+
             <button type="submit"  class="layui-btn" lay-filter="add" lay-submit="">
                 增加
             </button>
@@ -234,7 +235,7 @@
             ,done: function(data){
                 //上传完毕回调
                 console.log(data)
-                $(" input[ name='pic_4' ] ").val(data.src)
+                $(" input[ name='pic_5' ] ").val(data.src)
             }
             ,error: function(){
                 //请求异常回调
@@ -242,7 +243,7 @@
             ,before: function(obj){
                 //预读本地文件示例，不支持ie8
                 obj.preview(function(index, file, result){
-                    $('#pic_4msg').attr('src', result); //图片链接（base64）
+                    $('#pic_5msg').attr('src', result); //图片链接（base64）
                 });
             }
         });
@@ -265,14 +266,14 @@
             $('#myForm').ajaxForm(function(res) {
                 console.log(res);
                 if(res.err==0){
-                    alert('添加成功')
+  /*                  alert('添加成功')
                     window.close();
-                    window.parent.location.replace('/admin/staff');
+                    window.parent.location.replace('/admin/staff');*/
                 }else{
-                    alert('添加失败')
+                   /**/ alert('添加失败')
                 }
-                window.close();
-                window.parent.location.replace('/admin/staff');
+/*                window.close();
+                window.parent.location.replace('/admin/staff');*/
             });
 
         });

@@ -39,6 +39,7 @@ class Staff extends Controller
     {
         //
         $data = $request->post();
+        unset($data['pic']);
         $res = Db::table('staff')->insert($data);
         if($res){
             $res = array(
