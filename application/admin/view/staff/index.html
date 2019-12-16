@@ -132,11 +132,16 @@
                 });
             } else if(layEvent === 'edit'){ //编辑
                 //do something
-                layer.msg('修改信息');
+                id = data.st_id;
+                xadmin.open('编辑','/admin/staff/'+10+'/edit',700,700);
                 //同步更新缓存对应的值
+
+/*
                 obj.update({
                     nickname: '1111'
                 });
+
+                */
             } else if(layEvent === 'LAYTABLE_TIPS'){
                 layer.alert('Hi，头部工具栏扩展的右侧图标。');
             }

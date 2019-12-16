@@ -26,7 +26,7 @@ class Staff extends Controller
     public function create()
     {
         //
-        return $this->fetch('add');
+        return $this->fetch('addStaff');
     }
 
     /**
@@ -87,7 +87,9 @@ class Staff extends Controller
      */
     public function edit($id)
     {
-        //
+        $res = Db::table('staff')->find($id);
+        $this->assign($res);
+        return $this->fetch('editStaff');
     }
 
     /**
