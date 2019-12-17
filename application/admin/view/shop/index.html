@@ -29,7 +29,7 @@
 
     }
     .layui-upload-list img{
-        width: 90px;
+        width: 110px;
     }
     .layui-form{
         margin-top: 8%;
@@ -38,12 +38,13 @@
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="http://lib.h-ui.net/jquery.form/3.51.0/jquery.form.min.js"></script>
 <body>
-<form id="myForm" action="/admin/staff" method="post" class="layui-form" enctype="multipart/form-data">
+<form id="myForm" action="/admin/shop/{$sp_id}" method="post" class="layui-form" enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="PUT"/>
     <div class="layui-form-item">
         <label for="name" class="layui-form-label">
             <span class="x-red">*</span>店铺名称</label>
         <div class="layui-input-inline">
-            <input type="text" id="name" name="name" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+            <input type="text" id="name" name="name" value="{$name}" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
     </div>
     <!--<div class="layui-form-item">
         <label for="nickname" class="layui-form-label">
@@ -55,15 +56,15 @@
         <label for="iphone" class="layui-form-label">
             <span class="x-red">*</span>客服电话</label>
         <div class="layui-input-inline">
-            <input type="text" id="iphone" name="iphone" required="" l autocomplete="off" class="layui-input"></div>
+            <input type="text" id="iphone" name="iphone" value="{$iphone}" required="" l autocomplete="off" class="layui-input"></div>
     </div>
-    <div class="layui-form-item">
-        <label for="status" class="layui-form-label">
-            <span class="x-red">*</span>接单状态</label>
-        <div class="layui-input-block">
-            <input type="checkbox" id="status" name="status" checked="checked" lay-skin="switch" lay-text="开启|关闭">
-        </div>
-    </div>
+    <!--    <div class="layui-form-item">
+            <label for="status" class="layui-form-label">
+                <span class="x-red">*</span>接单状态</label>
+            <div class="layui-input-block">
+                <input type="checkbox" id="status" name="status" checked="checked" lay-skin="switch" lay-text="开启|关闭">
+            </div>
+        </div>-->
     <!--<div class="layui-form-item">
         <label for="s_time" class="layui-form-label">
             <span class="x-red">*</span>接单时间段</label>
@@ -77,30 +78,36 @@
             <span class="x-red">*</span></div>
     </div>-->
     <div class="layui-form-item">
-        <label for="desc" class="layui-form-label">订购须知</label>
-        <div class="layui-input-block">
-            <textarea placeholder="请输入内容" id="desc" name="desc" class="layui-textarea"></textarea>
+        <label for="desc" class="layui-form-label">店铺简介</label>
+        <div class="layui-input-block" >
+            <textarea placeholder="请输入内容" id="desc"  name="desc" class="layui-textarea">{$desc}</textarea>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">服务时间</label>
+        <label for="orderingInformation" class="layui-form-label">订购须知</label>
         <div class="layui-input-block">
-            <input type="checkbox" checked="checked" name="monday" value="1" title="周一" />
-            <input type="checkbox" checked="checked" name="tuesday" value="1" title="周二" />
-            <input type="checkbox" checked="checked" name="wednesday" value="1" title="周三" />
-            <input type="checkbox" checked="checked" name="thursday" value="1" title="周四" />
-            <input type="checkbox" checked="checked" name="friday" value="1" title="周五" />
-            <input type="checkbox" checked="checked" name="saturday" value="1" title="周六" />
-            <input type="checkbox" checked="checked" name="sunday" value="1" title="周日" />
+            <textarea placeholder="请输入内容" id="orderingInformation" name="orderingInformation" class="layui-textarea">{$orderingInformation}</textarea>
         </div>
     </div>
+    <!--    <div class="layui-form-item">
+            <label class="layui-form-label">服务时间</label>
+            <div class="layui-input-block">
+                <input type="checkbox" checked="checked" name="monday" value="1" title="周一" />
+                <input type="checkbox" checked="checked" name="tuesday" value="1" title="周二" />
+                <input type="checkbox" checked="checked" name="wednesday" value="1" title="周三" />
+                <input type="checkbox" checked="checked" name="thursday" value="1" title="周四" />
+                <input type="checkbox" checked="checked" name="friday" value="1" title="周五" />
+                <input type="checkbox" checked="checked" name="saturday" value="1" title="周六" />
+                <input type="checkbox" checked="checked" name="sunday" value="1" title="周日" />
+            </div>
+        </div>-->
 
     <div class="layui-form-item">
-        <label class="layui-form-label">用户照片</label>
+        <label class="layui-form-label">店铺照片</label>
         <div class="layui-input-block">
             <div class="layui-upload">
                 <button type="button" class="layui-btn" id="pic_1">
-                    <i class="layui-icon">&#xe67c;</i>店铺 logo 图
+                    <i class="layui-icon">&#xe67c;</i> 店铺 logo 图
                 </button>
                 <button type="button" class="layui-btn" id="pic_2">
                     <i class="layui-icon">&#xe67c;</i>店铺展示图一
@@ -111,21 +118,22 @@
                 <button type="button" class="layui-btn" id="pic_4">
                     <i class="layui-icon">&#xe67c;</i>店铺展示图三
                 </button>
-                <button type="button" class="layui-btn" id="pic_5">
+                <button type="button" class="layui-btn" id="logo">
                     <i class="layui-icon">&#xe67c;</i>店铺展示图四
                 </button>
-                <input class="layui-btn" type="hidden" name="pic_1" value="">
-                <input class="layui-btn" type="hidden" name="pic_2" value="">
-                <input class="layui-btn" type="hidden" name="pic_3" value="">
-                <input class="layui-btn" type="hidden" name="pic_4" value="">
-                <input class="layui-btn" type="hidden" name="pic_5" value="">
+                <input class="layui-btn" type="hidden" name="logo" value="{$logo}">
+                <input class="layui-btn" type="hidden" name="pic_1" value="{$pic_1}">
+                <input class="layui-btn" type="hidden" name="pic_2" value="{$pic_2}">
+                <input class="layui-btn" type="hidden" name="pic_3" value="{$pic_3}">
+                <input class="layui-btn" type="hidden" name="pic_4" value="{$pic_4}">
                 <div class="upimg">
                     <div class="layui-upload-list">
-                        <img class="layui-upload-img" id="pic_1msg" >
-                        <img class="layui-upload-img" id="pic_2msg" >
-                        <img class="layui-upload-img" id="pic_3msg" >
-                        <img class="layui-upload-img" id="pic_4msg" >
-                        <img class="layui-upload-img" id="pic_5msg" >
+                        <img class="layui-upload-img" id="logomsg"  src="/uploads/{$logo}">
+                        <img class="layui-upload-img" id="pic_1msg" src="/uploads/{$pic_1}" >
+                        <img class="layui-upload-img" id="pic_2msg" src="/uploads/{$pic_2}">
+                        <img class="layui-upload-img" id="pic_3msg" src="/uploads/{$pic_3}">
+                        <img class="layui-upload-img" id="pic_4msg" src="/uploads/{$pic_4}">
+
                     </div>
 
                 </div>
@@ -155,6 +163,25 @@
         var laydate = layui.laydate;
 
         var upload = layui.upload;
+        var uploadInst = upload.render({
+            elem: '#logo'
+            ,url: '/admin/files/upload'
+            ,field:'pic'
+            ,done: function(data){
+                //上传完毕回调
+                console.log(data)
+                $(" input[ name='logo' ] ").val(data.src)
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#logomsg').attr('src', result); //图片链接（base64）
+                });
+            }
+        });
         var uploadInst = upload.render({
             elem: '#pic_1'
             ,url: '/admin/files/upload'
@@ -231,25 +258,6 @@
                 });
             }
         });
-        var uploadInst = upload.render({
-            elem: '#pic_5'
-            ,url: '/admin/files/upload'
-            ,field:'pic'
-            ,done: function(data){
-                //上传完毕回调
-                console.log(data)
-                $(" input[ name='pic_5' ] ").val(data.src)
-            }
-            ,error: function(){
-                //请求异常回调
-            }
-            ,before: function(obj){
-                //预读本地文件示例，不支持ie8
-                obj.preview(function(index, file, result){
-                    $('#pic_5msg').attr('src', result); //图片链接（base64）
-                });
-            }
-        });
 
         laydate.render({
             elem: '#s_time', //指定元素
@@ -265,15 +273,15 @@
         });
 
         form.on('submit(add)', function(data){
-
             $('#myForm').ajaxForm(function(res) {
                 console.log(res);
                 if(res.err==0){
+                    alert('修改失败，请刷新页面再试一次')
                     /*                  alert('添加成功')
                                       window.close();
                                       window.parent.location.replace('/admin/staff');*/
                 }else{
-                    /**/ alert('添加失败')
+                    /**/ alert('修改成功')
                 }
                 /*                window.close();
                                 window.parent.location.replace('/admin/staff');*/

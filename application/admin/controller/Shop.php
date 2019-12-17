@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use think\Controller;
+use think\Db;
 use think\Request;
 
 class Shop extends Controller
@@ -15,7 +16,7 @@ class Shop extends Controller
     public function index()
     {
         //
-        return $this->fetch('index');
+        // return $this->fetch('index');
     }
 
     /**
@@ -59,6 +60,9 @@ class Shop extends Controller
     public function edit($id)
     {
         //
+        $res = Db::table('shop')->find($id);
+        $this->assign($res);
+        return $this->fetch('index');
     }
 
     /**
@@ -71,6 +75,13 @@ class Shop extends Controller
     public function update(Request $request, $id)
     {
         //
+        $data = $request->put();
+        unset($data['pic']);
+        unset($data['_method']);
+        $res = Db::table('shop')
+            ->where('sp_id', $id)
+            ->update($data);
+        return $res;
     }
 
     /**
