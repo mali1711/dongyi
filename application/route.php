@@ -32,3 +32,4 @@ Route::resource('admin/order','admin/Order');
 Route::resource('admin/project','admin/Project');
 Route::controller('admin/files','admin/Files');
 Route::resource('admin/staff','admin/Staff');
+Route::resource('admin/shop','admin/Shop');

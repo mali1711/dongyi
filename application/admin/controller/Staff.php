@@ -94,7 +94,6 @@ class Staff extends Controller
 
     /**
      * 保存更新的资源
-     *
      * @param  \think\Request  $request
      * @param  int  $id
      * @return \think\Response
