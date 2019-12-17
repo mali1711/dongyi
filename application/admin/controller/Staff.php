@@ -101,7 +101,21 @@ class Staff extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->put();
+        $data['status'] = isset($data['status'])?$data['status']:"0";
+        $data['monday'] = isset($data['monday'])?$data['monday']:"";
+        $data['tuesday'] = isset($data['tuesday'])?$data['tuesday']:"";
+        $data['wednesday'] = isset($data['wednesday'])?$data['wednesday']:"";
+        $data['thursday'] = isset($data['thursday'])?$data['thursday']:"";
+        $data['friday'] = isset($data['friday'])?$data['friday']:"";
+        $data['saturday'] = isset($data['saturday'])?$data['saturday']:"";
+        $data['sunday'] = isset($data['sunday'])?$data['sunday']:"";
+        unset($data['pic']);
+        unset($data['_method']);
+        $res = Db::table('staff')
+            ->where('st_id', $id)
+            ->update($data);
+        return $res;
     }
 
     /**
