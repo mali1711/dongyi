@@ -264,13 +264,12 @@
         form.on('submit(add)', function(data){
 
             $('#myForm').ajaxForm(function(res) {
-                console.log(res);
                 if(res.err==0){
-  /*                  alert('添加成功')
+                    alert('添加成功')
                     window.close();
-                    window.parent.location.replace('/admin/staff');*/
+                    window.parent.location.replace('/admin/staff');
                 }else{
-                   /**/ alert('添加失败')
+                    alert('添加失败')
                 }
 /*                window.close();
                 window.parent.location.replace('/admin/staff');*/

@@ -27,9 +27,19 @@ return [
 
 use think\Route;
 
-Route::resource('admin/index','admin/Index');
-Route::resource('admin/order','admin/Order');
-Route::resource('admin/project','admin/Project');
-Route::controller('admin/files','admin/Files');
-Route::resource('admin/staff','admin/Staff');
-Route::resource('admin/shop','admin/Shop');
+Route::resource('admin/index', 'admin/Index');
+Route::resource('admin/order', 'admin/Order');
+Route::resource('admin/project', 'admin/Project');
+Route::controller('admin/files', 'admin/Files');
+Route::resource('admin/staff', 'admin/Staff');
+Route::resource('admin/shop', 'admin/Shop');
+
+Route::group('api', function () {
+    Route::resource('/staff', 'api/Staff');
+    Route::resource('/project', 'api/Project');
+    Route::resource('/order', 'api/Order');
+    Route::resource('/user', 'api/User');
+});
+
+
+
