@@ -147,7 +147,7 @@ function member_del(obj, id) {
         function(index) {
             //发异步删除数据
             $.ajax({
-                url: '/admin/x-admin2/project/'+id,
+                url: '/admin/project/'+id,
                 type: 'DELETE',
                 success:function (res) {
                     console.log(res)

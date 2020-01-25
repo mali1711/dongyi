@@ -89,7 +89,7 @@
             </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button  class="layui-btn" lay-filter="add" lay-submit="">
+            <button  class="layui-btn" lay-filter="add" lay-submit="" onsubmit='return false'；>
                 增加
             </button>
 <!--            <button class="layui1-btn" lay-submit lay-filter="formDemo">立即提交</button>
@@ -118,8 +118,10 @@
             }
         });
 
+
         //监听提交
         form.on('submit(add)', function(data){
+
             // console.log(data);
 /*            $.ajax({
                 type:'POST',
@@ -141,15 +143,6 @@
                 window.close();
                 window.parent.location.replace('/admin/project');
             });
-
-            /*            layer.alert("增加成功", {icon: 6},function () {
-                            //关闭当前frame
-                            x_admin_close();
-
-                            // 可以对父窗口进行刷新
-                            x_admin_father_reload();
-                        });
-                        return false;*/
         });
     });</script>
 </body>

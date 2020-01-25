@@ -3,6 +3,7 @@
 namespace app\api\controller;
 
 use think\Controller;
+use think\Db;
 use think\Request;
 
 class Project extends Controller
@@ -12,9 +13,29 @@ class Project extends Controller
      *
      * @return \think\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $list = Db::table('project')->select();
+        $domain = $request->domain();
+        if (empty($list)){
 
+            $result = array(
+                'err'=>404,
+                'msg'=>'信息获取失败',
+                'data'=>$list
+            );
+        }else{
+            foreach ($list as $key=>$value){
+                $list[$key]['photo'] = $domain.'/uploads/'.$value['photo'];
+            }
+            $result = array(
+                'err'=>0,
+                'msg'=>'信息获取成功',
+                'data'=>$list
+            );
+        }
+
+        return $result;
     }
 
     /**

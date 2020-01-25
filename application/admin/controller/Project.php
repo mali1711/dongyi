@@ -89,6 +89,7 @@ class Project extends Controller
         if ($data['photo']==''){
             unset($data['photo']);
         }
+        unset($data['pic']);
         unset($data['_method']);
         $res = Db::table('project')
             ->where('pr_id', $id)
