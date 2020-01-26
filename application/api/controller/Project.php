@@ -68,6 +68,20 @@ class Project extends Controller
     public function read($id)
     {
         //
+        $list = Db::table('project')->where('pr_id',$id)->find();
+        if (empty($list)){
+            $data = array(
+                'err'=>1,
+                'msg'=>'信息获取失败',
+            );
+        }else{
+            $data = array(
+                'err'=>0,
+                'msg'=>'数据获取成功',
+                'data'=>$list
+            );
+        }
+        return $list;
     }
 
     /**
