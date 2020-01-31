@@ -56,7 +56,19 @@ class Staff extends Controller
      */
     public function read($id)
     {
-        //
+        if ($id=='all'){ //查询所有的技师列表
+            $request = Request::instance();
+            $domain = $request->domain();
+            $data = Db::table('staff')->select();
+            $result['err']=200;
+            $result['msg']='信息获取成功';
+            foreach ($data as $k=>$v){
+                $data[$k]['pic_1'] = $domain.'/uploads/'.$v['pic_1'];
+            }
+            $result['data']=$data;
+            return $result;
+        }
+
     }
 
     /**
@@ -68,6 +80,7 @@ class Staff extends Controller
     public function edit($id)
     {
         //
+
     }
 
     /**

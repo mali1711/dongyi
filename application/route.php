@@ -37,8 +37,9 @@ Route::resource('admin/shop', 'admin/Shop');
 Route::group('api', function () {
     Route::resource('/staff', 'api/Staff');
     Route::resource('/project', 'api/Project');
-    Route::resource('/order', 'api/Order');
+    Route::controller('/order', 'api/Order');
     Route::resource('/user', 'api/User');
+    Route::controller('/managetime', 'api/ManageTime');//时间管理
 });
 
 
