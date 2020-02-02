@@ -5,9 +5,15 @@ namespace app\api\controller;
 use think\Controller;
 use think\Db;
 use think\Request;
+use think\Session;
 
 class Order extends Controller
 {
+    public function _initialize()
+    {
+        Session::set('users.user_id',3);
+    }
+    
     /**
      * 显示所有订单列表
      *
@@ -39,7 +45,7 @@ class Order extends Controller
         //
         //$data = $request->post();
 
-        $data['user_id'] = $request->post('user_id');
+        $data['user_id'] = 3;
         $data['st_id'] = $request->post('st_id');
         $data['pr_id'] = $request->post('pr_id');
         $data['subtime'] = strtotime(date('Y').'-'.$request->post('subtime'),time());//预约时间
@@ -65,7 +71,7 @@ class Order extends Controller
             );
         }
 
-        return $res;
+        return $result;
     }
 
     /**
@@ -74,9 +80,12 @@ class Order extends Controller
      * @param  int  $id
      * @return \think\Response
      */
-    public function read($id)
+    public function getread(Request $request)
     {
-        //
+        $where['user_id'] = Session::get('users.user_id');
+        $where['status'] = $request->get('status');
+        $result = Db::table('order')->where($where)->select();
+        return $result;
     }
 
     /**
