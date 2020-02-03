@@ -24,12 +24,12 @@ class Login extends Controller{
         }else{
             $res = Db::table('users')->where($where)->find();
             if($res){
-                $result = array(
-                  'msg'=>'登陆成功',
-                  'err'=>'0',
-                  'data'=>$res
-                );
                 Session::set('users',$res);
+                $result = array(
+                    'msg'=>'登陆成功',
+                    'err'=>'0',
+                    'data'=>$res,
+                );
             }else{
                 $result = array(
                     'msg'=>'账号或者密码错误',

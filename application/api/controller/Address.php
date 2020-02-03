@@ -9,9 +9,9 @@ use think\Session;
 
 class Address extends Controller{
 
-    public function getindex()
+    public function getindex(Request $request)
     {
-        $res = $this->_find();
+        $res = $this->_find($request->get('user_id'));
         if(empty($res)){
             $result = array(
                 'err'=>1,
@@ -19,8 +19,8 @@ class Address extends Controller{
             );
         }else{
             $result = array(
-                'err'=>1,
-                'msg'=>'地址为空',
+                'err'=>0,
+                'msg'=>'地址获取成功',
                 'data'=>$res
             );
         }
@@ -33,13 +33,39 @@ class Address extends Controller{
      */
     public function postsave(Request $request)
     {
-        $res = $this->_find();
+        $res = $this->_find($request->get('user_id'));
         $data = $request->post();
         if(empty($res)){
-            return $this->_insert($data);
+            $resu = $this->_insert($data);
+            if($resu){
+                $result = array(
+                    'err'=>0,
+                    'msg'=>'地址变更成功',
+                    'data'=>$resu
+                );
+            }else{
+                $result = array(
+                    'err'=>1,
+                    'msg'=>'地址没有修改',
+                );
+            }
         }else{
-            return $this->_update($data);
+            $resu = $this->_update($data);
+                if($resu){
+                    $result = array(
+                        'err'=>0,
+                        'msg'=>'地址变更成功',
+                        'data'=>$resu
+                    );
+                }else{
+                    $result = array(
+                        'err'=>1,
+                        'msg'=>'地址没有修改',
+                    );
+                }
         }
+
+        return $result;
     }
 
     /**
@@ -48,7 +74,8 @@ class Address extends Controller{
      */
     public function _update($data)
     {
-        $where['user_id'] = Session::get('users.user_id');
+        $where['user_id'] = $data['user_id'];
+        unset($data['user_id']);
         $res = Db::table('address')->where($where)->update($data);
         return $res;
     }
@@ -59,16 +86,17 @@ class Address extends Controller{
      */
     public function _insert($data)
     {
-        $data['user_id'] = Session::get('users.user_id');
+        $where['user_id'] = $data['user_id'];
         $res = Db::table('address')->insert($data);
         return $res;
     }
 
-    public function _find()
+    public function _find($user_id)
     {
 
-        $where['user_id'] = Session::get('users.user_id');
+        $where['user_id'] = $user_id;
         $res = Db::table('address')->where($where)->find();
         return $res;
     }
+
 }
