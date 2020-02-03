@@ -11,7 +11,6 @@ class Order extends Controller
 {
     public function _initialize()
     {
-        Session::set('users.user_id',3);
     }
     
     /**
@@ -45,9 +44,10 @@ class Order extends Controller
         //
         //$data = $request->post();
 
-        $data['user_id'] = 3;
+        $data['user_id'] = $request->post('user_id');
         $data['st_id'] = $request->post('st_id');
         $data['pr_id'] = $request->post('pr_id');
+        $data['create_time'] = date('Y-m-d H:i:s');
         $data['subtime'] = strtotime(date('Y').'-'.$request->post('subtime'),time());//预约时间
         $st_info = Db::table('staff')->where('st_id',$data['st_id'])->find();
         $pr_info = Db::table('project')->where('pr_id',$data['pr_id'])->find();
@@ -82,9 +82,23 @@ class Order extends Controller
      */
     public function getread(Request $request)
     {
-        $where['user_id'] = Session::get('users.user_id');
-        $where['status'] = $request->get('status');
-        $result = Db::table('order')->where($where)->select();
+        $where = $request->get();
+        $data = Db::table('order')->where($where)->select();
+        foreach ($data as $k=>$v){
+            $data[$k]['subtime'] = date('Y-m-d H:i:s',$v['subtime']);
+        }
+        if(empty($data)){
+            $result = array(
+                'err'=>1,
+                'msg'=>'没有订单信息',
+            );
+        }else{
+            $result = array(
+                'err'=>0,
+                'msg'=>'订单信息获取成功',
+                'data'=>$data
+            );
+        }
         return $result;
     }
 
