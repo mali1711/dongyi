@@ -39,7 +39,7 @@ Route::group('api', function () {
     Route::resource('/project', 'api/Project');
     Route::controller('/order', 'api/Order');
     Route::controller('/login', 'api/Login');
-    Route::resource('/user', 'api/User');
+    Route::controller('/user', 'api/User');
     Route::controller('/address', 'api/Address');
     Route::controller('/managetime', 'api/ManageTime');//时间管理
 });

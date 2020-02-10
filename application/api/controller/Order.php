@@ -54,19 +54,21 @@ class Order extends Controller
         $data['st_info'] = json_encode($st_info);
         $data['pr_info'] = json_encode($pr_info);
         $data['add_purchase_num'] = 0;//加购数量
+        $data['add_purchase_minimum'] = $pr_info['min_num'];//最低加购数量
+        $data['add_purchase_desc'] = $pr_info['add_purchase_desc'];//加购简介
         $data['add_purchase_price'] = $pr_info['add_purchase_price'];//加购单价
-        $data['add_purchase_tprice'] = $data['add_purchase_num']*$data['add_purchase_price'];//加购总价
+        $data['add_purchase_tprice'] = 0;//加购总价
         $data['subsidy'] = 0;//路费补助
         $data['total_price'] = $pr_info['price'];//订单总价,不含加价
         $res = Db::table('order')->insert($data);
         if($res){
             $result = array(
-                'msg'=>'添加成功',
+                'msg'=>'预约成功',
                 'err'=>0,
             );
         }else{
             $result = array(
-                'msg'=>'添加失败',
+                'msg'=>'意外错误',
                 'err'=>1,
             );
         }
@@ -103,36 +105,47 @@ class Order extends Controller
     }
 
     /**
-     * 显示编辑资源表单页.
-     *
-     * @param  int  $id
-     * @return \think\Response
+     * @param $order_id
      */
-    public function edit($id)
+    public function getdetail(Request $request)
     {
-        //
+        $where['order_id'] = $request->get('order_id');
+        $res = Db::table('order')->where($where)->find();
+        $res['st_info'] = json_decode($res['st_info']);
+        $res['pr_info'] = json_decode($res['pr_info']);
+        return $res;
     }
 
     /**
-     * 保存更新的资源
-     *
-     * @param  \think\Request  $request
-     * @param  int  $id
-     * @return \think\Response
+     * 加购
+     * todo 扣除余额
      */
-    public function update(Request $request, $id)
+    public function postjiagou(Request $request)
     {
-        //
+        $where['order_id'] = $request->post('order_id');
+        $res = Db::table('order')->where($where)->find();
+        $add_purchase_num = $request->post('add_purchase_num');//加购数量
+        $total = $res['add_purchase_price']*$add_purchase_num;//加购单价 todo 需调用金额扣除接口
+        $res = Db::table('order')->where($where)->setInc('add_purchase_num',$add_purchase_num);
+        $add_purchase_num+=$add_purchase_num;//加购完以后的数量
+        if($res){
+            $result = array(
+                'msg'=>'加价成功',
+                'err'=>0,
+                'add_purchase_num'=>$add_purchase_num
+            );
+        }else{
+            $result = array(
+                'msg'=>'意外错误',
+                'err'=>1,
+                'add_purchase_num'=>$add_purchase_num
+            );
+        }
+
+        return $result;
     }
 
     /**
-     * 删除指定资源
      *
-     * @param  int  $id
-     * @return \think\Response
      */
-    public function delete($id)
-    {
-        //
-    }
 }

@@ -35,12 +35,12 @@ class Address extends Controller{
     {
         $res = $this->_find($request->get('user_id'));
         $data = $request->post();
-        if(empty($res)){
+        if($res != ''){
             $resu = $this->_insert($data);
             if($resu){
                 $result = array(
                     'err'=>0,
-                    'msg'=>'地址变更成功',
+                    'msg'=>'地址添加成功',
                     'data'=>$resu
                 );
             }else{
