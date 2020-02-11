@@ -58,6 +58,9 @@ class Order extends Controller
         $data['add_purchase_desc'] = $pr_info['add_purchase_desc'];//加购简介
         $data['add_purchase_price'] = $pr_info['add_purchase_price'];//加购单价
         $data['add_purchase_tprice'] = 0;//加购总价
+        $data['address'] = $request->post('address');//加购总价
+        $data['address_contacts'] = $request->post('address_contacts');//加购总价
+        $data['address_mobile'] = $request->post('address_mobile');//加购总价
         $data['subsidy'] = 0;//路费补助
         $data['total_price'] = $pr_info['price'];//订单总价,不含加价
         $res = Db::table('order')->insert($data);
