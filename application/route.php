@@ -42,6 +42,7 @@ Route::group('api', function () {
     Route::controller('/user', 'api/User');
     Route::controller('/address', 'api/Address');
     Route::controller('/managetime', 'api/ManageTime');//时间管理
+    Route::controller('/sms', 'api/Sms');//短信验证
 });
 
 
