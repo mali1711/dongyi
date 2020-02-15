@@ -2,6 +2,7 @@
 
 namespace app\api\controller;
 
+use think\captcha\Captcha;
 use think\Controller;
 use think\Db;
 use think\Request;
@@ -18,7 +19,7 @@ class Login extends Controller{
         $where['passwd'] = md5('dongyi'.$request->post('passwd'));
         if(empty($where)){
             $result = array(
-                'msg'=>'请正确填写你的登陆信息',
+                'msg'=>'信息不完整',
                 'err'=>'2'
             );
         }else{
@@ -32,7 +33,7 @@ class Login extends Controller{
                 );
             }else{
                 $result = array(
-                    'msg'=>'账号或者密码错误',
+                    'msg'=>'密码错误',
                     'err'=>'1',
                 );
             }
@@ -70,4 +71,60 @@ class Login extends Controller{
         }
         return $result;
     }
+
+    /**
+     * 注册
+     */
+    public function postregistration(Request $request)
+    {
+        $data = $request->post('');
+        $where['mobile'] = $data['mobile'];
+        $user = Db::table('users')->where($where)->find();
+        if($user){
+            return returnApi(10004,'手机号已经注册','');
+        }
+        $data['passwd'] = md5('dongyi'.$request->post('passwd'));
+        $res = Db::table('users')->insert($data);
+        if($res){
+           return returnApi(0,'注册成功','');
+        }else{
+            return returnApi(10003,'注册失败','');
+        }
+    }
+    
+    /**
+     * 展示验证码
+     * @return \think\Response
+     */
+    public function getcaptcha()
+    {
+
+        $captcha = new Captcha();
+        $captcha->length   = 300;
+        $captcha->useNoise = false;
+        return $captcha->entry();
+    }
+
+    /**
+     * 验证用户输入的验证码是否正确
+     */
+    public function postCaptchaResult(Request $request){
+        $captcha = $request->post('captcha');
+        if (!captcha_check($captcha)){
+            $result = array(
+                'err'=>10002,
+                'c'=>$captcha,
+                'msg'=>'验证码输入错误'
+            );
+        }else{
+            $result = array(
+                'err'=>0,
+                'c'=>$captcha,
+                'msg'=>'验证码输入成功'
+            );
+        }
+        return $result;
+    }
+
+
 }

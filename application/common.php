@@ -36,3 +36,18 @@ function uploadImg($file='file',$path='default')
         return $file->getError();
     }
 }
+
+/**
+ * @param $err 错误号
+ * @param $msg 信息
+ * @param $data 数据
+ * @return array
+ */
+function returnApi($err,$msg,$data){
+    $result = array(
+        'err'=>$err,
+        'msg'=>$msg,
+        'data'=>$data
+    );
+    return $result;
+}
