@@ -43,7 +43,7 @@ class Order extends Controller
     {
         //
         //$data = $request->post();
-
+        Db::startTrans();
         $data['user_id'] = $request->post('user_id');
         $data['st_id'] = $request->post('st_id');
         $data['pr_id'] = $request->post('pr_id');
@@ -63,17 +63,27 @@ class Order extends Controller
         $data['address_mobile'] = $request->post('address_mobile');//加购总价
         $data['subsidy'] = 0;//路费补助
         $data['total_price'] = $pr_info['price'];//订单总价,不含加价
-        $res = Db::table('order')->insert($data);
-        if($res){
+        $baresult = Db::table('balance')->where('users_id',$data['user_id'])->setDec('balance',$data['total_price']);
+        if(!$baresult){
             $result = array(
-                'msg'=>'预约成功',
-                'err'=>0,
+                'msg'=>'余额不足',
+                'err'=>10005,
             );
+            Db::rollback();
         }else{
-            $result = array(
-                'msg'=>'意外错误',
-                'err'=>1,
-            );
+            $res = Db::table('order')->insert($data);
+            if($res){
+                $result = array(
+                    'msg'=>'预约成功',
+                    'err'=>0,
+                );
+                Db::commit();
+            }else{
+                $result = array(
+                    'msg'=>'预约失败',
+                    'err'=>10006,
+                );
+            }
         }
         return $result;
     }

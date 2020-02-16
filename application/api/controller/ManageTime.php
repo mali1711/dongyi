@@ -47,6 +47,7 @@ class ManageTime extends Controller{
         $cuttime = time();
         $todaystart = strtotime(date("Y-m-d")."08:00:00",time());
         $todayend = strtotime(date("Y-m-d")."23:59:59",time());
+        $time = array();
         for ($i=1;$i<=23;$i++){
             if($cuttime+$i*60*60<=$todayend and $cuttime+$i*60*60>=$todaystart){
                 $time[] =   date("H",$cuttime+$i*60*60);

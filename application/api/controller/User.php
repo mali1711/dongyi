@@ -3,83 +3,18 @@
 namespace app\api\controller;
 
 use think\Controller;
+use think\Db;
 use think\Request;
 
 class User extends Controller
 {
     /**
-     * 显示资源列表
-     *
-     * @return \think\Response
+     * 获取用户还有多少余额
      */
-    public function index()
+    public function getbalance(Request $request)
     {
-        //
-    }
-
-    /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * 保存新建的资源
-     *
-     * @param  \think\Request $request
-     * @return \think\Response
-     */
-    public function save(Request $request)
-    {
-        //
-    }
-
-    /**
-     * 显示技师详情，包括技师所拥有项目
-     *
-     * @param  int $id
-     * @return \think\Response
-     */
-    public function read($id)
-    {
-        //
-    }
-
-    /**
-     * 显示编辑资源表单页.
-     *
-     * @param  int $id
-     * @return \think\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * 保存更新的资源
-     *
-     * @param  \think\Request $request
-     * @param  int $id
-     * @return \think\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * 删除指定资源
-     *
-     * @param  int $id
-     * @return \think\Response
-     */
-    public function delete($id)
-    {
-        //
+       $res =  Db::table('balance')->where('users_id',$request->get('users_id'))->column('balance')[0
+       ];
+       dump($res);
     }
 }
