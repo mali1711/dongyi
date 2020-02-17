@@ -91,6 +91,19 @@ class Login extends Controller{
             return returnApi(10003,'注册失败','');
         }
     }
+
+
+    public function postforgetPasswd(Request $request)
+    {
+        $where['mobile'] = $request->post('mobile');
+        $data['passwd'] = md5('dongyi'.$request->post('passwd'));
+        $res = Db::table('users')->where($where)->update($data);
+        if($res){
+            return returnApi(0,'更新成功','');
+        }else{
+            return returnApi(10007,'更新失败','');
+        }
+    }
     
     /**
      * 展示验证码

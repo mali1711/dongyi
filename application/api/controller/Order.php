@@ -97,7 +97,7 @@ class Order extends Controller
     public function getread(Request $request)
     {
         $where = $request->get();
-        $data = Db::table('order')->where($where)->select();
+        $data = Db::table('order')->where($where)->order('create_time','desc')->select();
         foreach ($data as $k=>$v){
             $data[$k]['subtime'] = date('Y-m-d H:i:s',$v['subtime']);
         }

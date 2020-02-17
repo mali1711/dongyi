@@ -13,8 +13,11 @@ class User extends Controller
      */
     public function getbalance(Request $request)
     {
-       $res =  Db::table('balance')->where('users_id',$request->get('users_id'))->column('balance')[0
-       ];
-       dump($res);
+       $res =  Db::table('balance')->where('users_id',$request->get('users_id'))->column('balance');
+       if(!$res){
+           return 0;
+       }else{
+           return $res[0];
+       }
     }
 }

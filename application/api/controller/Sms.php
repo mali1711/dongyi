@@ -11,7 +11,8 @@ class Sms extends Controller{
     {
         $param = rand(100000,999999);
         $mobile = $request->post('mobile');
-        $res = $this->sendmsg($param,$mobile);
+        $res = array();
+        //$res = $this->sendmsg($param,$mobile);
         if($mobile==''){
             $result = array(
                 'err'=>10001,
