@@ -45,5 +45,9 @@ Route::group('api', function () {
     Route::controller('/sms', 'api/Sms');//短信验证
 });
 
+Route::group('staff',function (){
+    Route::controller('/staff', 'staff/staff');
+});
+
 
 

@@ -3,6 +3,7 @@
 namespace app\api\controller;
 
 use think\Controller;
+use think\Db;
 use think\Request;
 
 class ManageTime extends Controller{
@@ -69,5 +70,16 @@ class ManageTime extends Controller{
             }
         }
         return $time;
+    }
+
+    /**
+     * 时间管理，主要是查看技师目前已经被占用的时间
+     */
+    public function gettimecontrol()
+    {
+        $where = array(
+            'st_id'=>40,
+        );
+        Db::table('order')->where($where)->where('create_time','between time',['2015-1-1','2016-1-1']);
     }
 }
