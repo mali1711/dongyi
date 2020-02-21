@@ -4,11 +4,11 @@
  */
 namespace app\staff\controller;
 
-use think\Controller;
+use app\common\controller\Sms as commonSms;
 use think\Db;
 use think\Request;
 
-class Staff extends Controller{
+class Staff extends commonSms {
 
     /**
      * 登陆

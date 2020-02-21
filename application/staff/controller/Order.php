@@ -4,7 +4,9 @@
  */
 namespace app\staff\controller;
 
+use app\staff\model\Orders;
 use think\Controller;
+use think\Db;
 use think\Request;
 
 class Order extends Controller{
@@ -15,7 +17,14 @@ class Order extends Controller{
      */
     public function getList(Request $request)
     {
-        
+        $where['st_id'] = $request->get('st_id');
+        $where['status'] = $request->get('status');
+        $list = Orders::where($where)->order('create_time','desc')->select()->toArray();
+        if($list){
+            return returnApi('0','订单信息获取成功',$list);
+        }else{
+            return returnApi('10007','订单信息获取失败','');
+        }
     }
 
     /**
@@ -24,7 +33,17 @@ class Order extends Controller{
      */
     public function getreceipt(Request $request)
     {
-        
+        $orders = Orders::get($request->get('order_id'));
+        if(!$orders){
+            return returnApi('10008','此订单有误，请核实','');
+        }
+        $orders->status = 1;
+        $res = $orders->save();
+        if($res){
+            return returnApi('0','您已成功接单，请尽快完成','');
+        }else{
+            return returnApi('10007','接单有误,请重新操作或者联系客服','');
+        }
     }
 
 
@@ -34,7 +53,13 @@ class Order extends Controller{
      */
     public function getdetail(Request $request)
     {
-        
+        $result = Orders::get($request->get('order_id'));
+        if($result){
+            $result = $result->toArray();
+            return returnApi('0','信息获取成功',$result);
+        }else{
+            return returnApi('10009','信息缺失','');
+        }
     }
     
     /**
@@ -43,6 +68,13 @@ class Order extends Controller{
      */
     public function getnotice(Request $request)
     {
-        
+        $result = Orders::get($request->get());
+        if($result){
+            $result->notice = 0;
+            $result->save();
+            return returnApi('10010','您有新的订单了','');
+        }else{
+            return returnApi('10010','您没有新的订单','');
+        }
     }
 }

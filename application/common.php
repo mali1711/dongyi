@@ -51,3 +51,14 @@ function returnApi($err,$msg,$data){
     );
     return $result;
 }
+
+/**
+ * @param $param 短信信息
+ * @param $mobile 验证码
+ */
+function sendmsg($param,$mobile){
+    $options['accountsid']='594c1c503e4539df437ba99c235eb0ec';
+    //填写在开发者控制台首页上的Auth Token
+    $options['token']='eb78c6b89891c71f8769ce7909c39a25';
+    new \sms\Ucpaas\Ucpaas();
+}
