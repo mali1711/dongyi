@@ -9,29 +9,6 @@ use think\Session;
 
 class Order extends Controller
 {
-    public function _initialize()
-    {
-    }
-    
-    /**
-     * 显示所有订单列表
-     *
-     * @return \think\Response
-     */
-    public function getindex()
-    {
-        //
-    }
-
-    /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
-     */
-    public function getcreate()
-    {
-        //
-    }
 
     /**
      * 保存用户提交的订单信息
@@ -41,6 +18,7 @@ class Order extends Controller
      */
     public function postsave(Request $request)
     {
+
         //
         //$data = $request->post();
         Db::startTrans();
@@ -55,6 +33,7 @@ class Order extends Controller
         $data['pr_info'] = json_encode($pr_info);
         $data['add_purchase_num'] = 0;//加购数量
         $data['add_purchase_minimum'] = $pr_info['min_num'];//最低加购数量
+        $data['title'] = $pr_info['title'];//项目名称
         $data['add_purchase_desc'] = $pr_info['add_purchase_desc'];//加购简介
         $data['add_purchase_price'] = $pr_info['add_purchase_price'];//加购单价
         $data['add_purchase_tprice'] = 0;//加购总价
@@ -115,6 +94,8 @@ class Order extends Controller
         }
         return $result;
     }
+
+
 
     /**
      * @param $order_id

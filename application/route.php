@@ -66,6 +66,7 @@ Route::group('common',function (){
 Route::group('staff',function (){
     Route::controller('/staff', 'staff/Staff');
     Route::controller('/order', 'staff/Order');
+    Route::controller('/timemanage', 'staff/TimeManagement');
 });
 
 

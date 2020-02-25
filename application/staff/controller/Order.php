@@ -19,7 +19,13 @@ class Order extends Controller{
     {
         $where['st_id'] = $request->get('st_id');
         $where['status'] = $request->get('status');
+        if ($where['status']==''){
+            unset($where['status']);
+        }
         $list = Orders::where($where)->order('create_time','desc')->select()->toArray();
+        foreach ($list as $k=>$v){
+            $list[$k]['subtime'] = date('Y-m-d H:i:s',$v['subtime']);
+        }
         if($list){
             return returnApi('0','订单信息获取成功',$list);
         }else{
@@ -54,12 +60,9 @@ class Order extends Controller{
     public function getdetail(Request $request)
     {
         $result = Orders::get($request->get('order_id'));
-        if($result){
-            $result = $result->toArray();
-            return returnApi('0','信息获取成功',$result);
-        }else{
-            return returnApi('10009','信息缺失','');
-        }
+        $result['st_info'] = json_decode($result['st_info']);
+        $result['pr_info'] = json_decode($result['pr_info']);
+        return $result;
     }
     
     /**
@@ -72,7 +75,7 @@ class Order extends Controller{
         if($result){
             $result->notice = 0;
             $result->save();
-            return returnApi('10010','您有新的订单了','');
+            return returnApi('0','您有新的订单了','');
         }else{
             return returnApi('10010','您没有新的订单','');
         }

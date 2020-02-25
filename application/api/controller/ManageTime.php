@@ -8,7 +8,7 @@ use think\Request;
 
 class ManageTime extends Controller{
     //获取日期
-    public function getInitial()
+    public function getInitial(Request $request)
     {
         $cuttime = time();
         $time = $this->_gettimeToday();
