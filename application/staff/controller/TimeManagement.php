@@ -3,15 +3,22 @@
 namespace app\staff\controller;
 
 use think\Controller;
+use think\Db;
 use think\Request;
 
 class TimeManagement extends Controller{
+
+
     /**
      * 获取日期列表
      * @return array
      */
-    public function getInitial()
+    public function getInitial(Request $request)
     {
+        $datas = $request->get('date');
+        $dyas = date('Y-').$datas;
+        $st_id = $request->get('st_id');
+        $timelist = $this->_getLockTime($st_id,$dyas);
         $cuttime = time();
         $time = $this->_gettimeToday();
         for ($i=0;$i<=5;$i++){
@@ -24,16 +31,20 @@ class TimeManagement extends Controller{
         }
 
         $t = array();
-        foreach ($time as $k=>$v){
-            $t[$k]['time'] = $v;
-            $t[$k]['disabled'] = true;
+        foreach ($time as $key=>$value){
+            $t[$key]['time'] = $value;
+            if(in_array($dyas.' '.$value.':00:00',$timelist)){
+                $t[$key]['disabled'] = false;
+            }else{
+                $t[$key]['disabled'] = true;
+            }
         }
 
         $data['date'] = $date;
         $data['time'] = $t;
         return $data;
     }
-
+    
     /**
      * 用户通过点击获取时间
      */
@@ -41,6 +52,8 @@ class TimeManagement extends Controller{
     {
         $data = $request->get('date');
         $date = date('Y-').$data;
+        $st_id = $request->get('st_id');
+        $timelist = $this->_getLockTime($st_id,$date);
         if ($date==date('Y-m-d')){
             $time = $this->_gettimeToday();
         }else{
@@ -49,9 +62,29 @@ class TimeManagement extends Controller{
         $result = array();
         foreach ($time as $key=>$value){
             $result[$key]['time'] = $value;
-            $result[$key]['disabled'] = true;
+            if(in_array($date.' '.$value.':00:00',$timelist)){
+                $result[$key]['disabled'] = false;
+            }else{
+                $result[$key]['disabled'] = true;
+            }
         }
-        return $time;
+        return $result;
+    }
+
+    /**
+     * 获取锁定的时间
+     * @param $st_id
+     * @param $time
+     * @return array
+     */
+    protected function _getLockTime($st_id,$time)
+    {
+        $s = strtotime($time);
+        $startTime = date('Y-m-d',$s);
+        $endTime = date('Y-m-d',$s+86400);
+        $timelist = Db::table('staff_managetime')->where('st_id',$st_id)
+        ->where('lockingtime','between time',[$startTime,$endTime])->column('lockingtime');
+        return $timelist;
     }
 
     /**
@@ -74,6 +107,7 @@ class TimeManagement extends Controller{
         }
         return $time;
     }
+
     /**
      * 获取其他时间的日期
      */
@@ -89,4 +123,38 @@ class TimeManagement extends Controller{
         }
         return $time;
     }
+
+
+    /**
+     * 时间管理
+     * @param Request $request
+     */
+    public function gettimeman(Request $request)
+    {
+        $time =  $request->get('time');
+        $where['lockingtime'] = date('Y-').$time;
+        $where['st_id'] = $request->get('st_id');
+        $resu = Db::table('staff_managetime')->where($where)->find();
+        if($resu){
+            $res2 = Db::table('staff_managetime')->where($where)->delete();
+            if($res2){
+                return returnApi(10,'已解除','');
+            }else{
+                return returnApi(10011,'网络延迟','');
+            }
+        }else{
+            $data = $where;
+            $data['create_time'] = date('Y-m-d H:i:s');
+            $res = Db::table('staff_managetime')->insert($data);
+            if($res){
+                return returnApi(0,'已锁定','');
+            }else{
+                return returnApi(10010,'网络延迟','');
+            }
+        }
+
+    }
+
+    
+
 }
