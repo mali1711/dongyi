@@ -29,7 +29,6 @@ class TimeManagement extends Controller{
             $date[$key]['day']=$value;
             $date[$key]['disabled']=true;
         }
-
         $t = array();
         foreach ($time as $key=>$value){
             $t[$key]['time'] = $value;

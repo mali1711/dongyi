@@ -69,5 +69,13 @@ Route::group('staff',function (){
     Route::controller('/timemanage', 'staff/TimeManagement');
 });
 
+/**
+ * 技师端接口
+ */
+Route::group('backstage',function (){
+    Route::controller('/staff', 'backstage/Staff');
+    Route::controller('/order', 'backstage/Order');
+    Route::controller('/project', 'backstage/Project');
+});
 
 

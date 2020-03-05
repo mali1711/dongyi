@@ -37,9 +37,9 @@ class Order extends Controller
         $data['add_purchase_desc'] = $pr_info['add_purchase_desc'];//加购简介
         $data['add_purchase_price'] = $pr_info['add_purchase_price'];//加购单价
         $data['add_purchase_tprice'] = 0;//加购总价
-        $data['address'] = $request->post('address');//加购总价
-        $data['address_contacts'] = $request->post('address_contacts');//加购总价
-        $data['address_mobile'] = $request->post('address_mobile');//加购总价
+        $data['address'] = $request->post('address');//地址
+        $data['address_contacts'] = $request->post('address_contacts');//联系人
+        $data['address_mobile'] = $request->post('address_mobile');//手机号
         $data['subsidy'] = 0;//路费补助
         $data['total_price'] = $pr_info['price'];//订单总价,不含加价
         $baresult = Db::table('balance')->where('users_id',$data['user_id'])->setDec('balance',$data['total_price']);
@@ -115,10 +115,22 @@ class Order extends Controller
      */
     public function postjiagou(Request $request)
     {
+        Db::startTrans();
         $where['order_id'] = $request->post('order_id');
+        $user_id = $request->post('user_id');
         $res = Db::table('order')->where($where)->find();
         $add_purchase_num = $request->post('add_purchase_num');//加购数量
         $total = $res['add_purchase_price']*$add_purchase_num;//加购单价 todo 需调用金额扣除接口
+        $baresult = Db::table('balance')->where('users_id',$user_id)->setDec('balance',$total);
+        if(!$baresult){
+            $result = array(
+                'msg'=>'余额不足',
+                'err'=>3,
+                'add_purchase_num'=>$add_purchase_num
+            );
+            Db::rollback();
+            return $result;
+        }
         $res = Db::table('order')->where($where)->setInc('add_purchase_num',$add_purchase_num);
         $add_purchase_num+=$add_purchase_num;//加购完以后的数量
         if($res){
@@ -127,12 +139,14 @@ class Order extends Controller
                 'err'=>0,
                 'add_purchase_num'=>$add_purchase_num
             );
+            Db::commit();
         }else{
             $result = array(
                 'msg'=>'意外错误',
                 'err'=>1,
                 'add_purchase_num'=>$add_purchase_num
             );
+            Db::rollback();
         }
 
         return $result;
