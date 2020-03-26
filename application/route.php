@@ -76,6 +76,8 @@ Route::group('backstage',function (){
     Route::controller('/staff', 'backstage/Staff');
     Route::controller('/order', 'backstage/Order');
     Route::controller('/project', 'backstage/Project');
+    Route::controller('/shop', 'backstage/Shop');
+    Route::controller('/login', 'backstage/Login');
 });
 
 
