@@ -27,15 +27,47 @@ class ManageTime extends Controller{
     public function getclickTime(Request $request)
     {
        $data = $request->get('date');
+       $st_id = $request->get('st_id');
        $date = date('Y-').$data;
        if ($date==date('Y-m-d')){
            $time = $this->_gettimeToday();
        }else{
            $time = $this->_gettimeToOtherDay($date);
        }
-       return $time;
+        $busytime = $this->getLockTime($st_id,$data);
+        foreach ($busytime as $k=>$v){
+            $busytime[$k] = date('H',strtotime($v));
+        }
+        $newtime = [];
+        foreach ($time as $key=>$value){
+
+            if(!in_array($value,$busytime)){
+                $newtime[] = $value;
+            }
+        }
+        return $newtime;
     }
 
+    public function getLockTime($st_id=38,$time='03-28')
+    {
+        $startTime = date('Y').'-'.$time;
+        $endTime = date('Y-m-d',strtotime($startTime)+86400);
+        $timelist1 = Db::table('staff_managetime')
+            ->where('st_id',$st_id)
+            ->where('lockingtime','between time',[$startTime,$endTime])
+            ->column('lockingtime');//获取锁定的时间
+        $startTime = strtotime($startTime);
+        $endTime = strtotime($endTime);
+        $timelist2 = Db::table('order')
+            ->where('st_id',$st_id)
+            ->where('subtime','between time',[$startTime,$endTime])
+            ->column('subtime');//获取锁定的时间
+        foreach ($timelist2 as $k=>$v){
+            $timelist2[$k] = date('Y-m-d H:00:00',$v);
+        }
+        return array_merge($timelist1,$timelist2);
+    }
+    
     /**
      * 获取当天日期
      * @param null $time
