@@ -67,7 +67,9 @@ class ManageTime extends Controller{
         }
         return array_merge($timelist1,$timelist2);
     }
-    
+
+
+
     /**
      * 获取当天日期
      * @param null $time

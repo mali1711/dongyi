@@ -2,6 +2,7 @@
 
 namespace app\api\controller;
 
+use app\staff\model\Orders;
 use think\Controller;
 use think\Db;
 use think\Request;
@@ -20,7 +21,7 @@ class Order extends Controller
     {
 
         //
-        //$data = $request->post();
+        $data = $request->post();
         Db::startTrans();
         $data['user_id'] = $request->post('user_id');
         $data['st_id'] = $request->post('st_id');
@@ -42,8 +43,13 @@ class Order extends Controller
         $data['address_mobile'] = $request->post('address_mobile');//手机号
         $data['subsidy'] = 0;//路费补助
         $data['total_price'] = $pr_info['price'];//订单总价,不含加价
-        $baresult = Db::table('balance')->where('users_id',$data['user_id'])->setDec('balance',$data['total_price']);
-        if(!$baresult){
+        $balance = Db::table('balance')->where('users_id',$data['user_id'])->find()['balance'];
+        if($balance<$data['total_price']){
+            $baresult =0;
+        }else{
+            $baresult = Db::table('balance')->where('users_id',$data['user_id'])->setDec('balance',$data['total_price']);
+        }
+        if($baresult != 1){
             $result = array(
                 'msg'=>'余额不足',
                 'err'=>10005,
@@ -52,6 +58,7 @@ class Order extends Controller
         }else{
             $res = Db::table('order')->insert($data);
             if($res){
+                Db::table('staff')->where('st_id',$data['st_id'])->setInc('order_number',1);
                 $result = array(
                     'msg'=>'预约成功',
                     'err'=>0,
@@ -95,7 +102,24 @@ class Order extends Controller
         return $result;
     }
 
-
+    /**
+     * 完成订单
+     * @param Request $request
+     */
+    public function getcomplete(Request $request)
+    {
+        $orders = Orders::get($request->get('order_id'));
+        if(!$orders){
+            return returnApi('10008','此订单有误，请核实','');
+        }
+        $orders->status = 2;
+        $res = $orders->save();
+        if($res){
+            return returnApi('0','订单完成','');
+        }else{
+            return returnApi('10007','接单有误,请重新操作或者联系客服','');
+        }
+    }
 
     /**
      * @param $order_id
