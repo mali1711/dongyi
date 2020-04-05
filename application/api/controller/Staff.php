@@ -18,7 +18,8 @@ class Staff extends Controller
         $request = Request::instance();
         $domain = $request->domain();
         $data = array();
-
+        $lng = $request->get('lng');//当前所在位置
+        $lat = $request->get('lat');//当前所在位置
         if($request->get('order')==1){
             $order='asc';//升序
         }else{
@@ -33,7 +34,7 @@ class Staff extends Controller
         }elseif ($request->get('filter')=='distance'){//距离排序
             //当前位置 116.111529,35.79448
             $data = Db::table('staff')->select();
-            $data =  $this->initorderinfo($data,116.111529,35.79448,$order);
+            $data =  $this->initorderinfo($data,$lng,$lat,$order);
         }elseif ($request->get('filter')=='order_number'){//订单数量
             $data = $data = Db::table('staff')->order("order_number {$order}")->select();
         }else{
@@ -44,7 +45,7 @@ class Staff extends Controller
         foreach ($data as $k=>$v){
             $data[$k]['pic_1'] = $domain.'/uploads/'.$v['pic_1'];
         }
-        $data = $this->initorderinfo($data,116.111529,35.79448,'');
+        $data = $this->initorderinfo($data,$lng,$lat,'');
         $result['data']=$data;
         return $result;
     }
