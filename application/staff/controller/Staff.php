@@ -22,7 +22,7 @@ class Staff extends commonSms {
         if($staffInfo){
            return returnApi('0','登陆成功',$staffInfo);
         }else{
-           return returnApi('10001','账号或者密码错误',$staffInfo);
+           return returnApi('10001','输入有误',$staffInfo);
         }
     }
 

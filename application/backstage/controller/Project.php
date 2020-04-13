@@ -8,7 +8,9 @@ use think\Request;
 
 class Project extends Controller{
 
-    /**
+    /**369  ReferenceError: Can't find variable: APISERVER __ERROR
+    20:17:33.391 [ERROR] : [JS Framework] Failed to execute the callback function:
+    20:17:33.
      * 项目列表
      * @param Request $request
      */

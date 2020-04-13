@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use think\Controller;
+use think\Db;
 use think\Request;
 
 class User extends Controller
@@ -14,7 +15,12 @@ class User extends Controller
      */
     public function index()
     {
-
+        // 查询状态为1的用户数据 并且每页显示10条数据
+                $list = Db::table('users')->paginate(10);
+        // 把分页数据赋值给模板变量list
+                $this->assign('list', $list);
+        // 渲染模板输出
+                return $this->fetch('index');
     }
 
     /**
