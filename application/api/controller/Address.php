@@ -35,7 +35,7 @@ class Address extends Controller{
     {
         $res = $this->_find($request->get('user_id'));
         $data = $request->post();
-        if($res != ''){
+        if($res == null){
             $resu = $this->_insert($data);
             if($resu){
                 $result = array(
@@ -46,7 +46,7 @@ class Address extends Controller{
             }else{
                 $result = array(
                     'err'=>1,
-                    'msg'=>'地址没有修改',
+                    'msg'=>'地址修改失败',
                 );
             }
         }else{
@@ -86,7 +86,6 @@ class Address extends Controller{
      */
     public function _insert($data)
     {
-        $where['user_id'] = $data['user_id'];
         $res = Db::table('address')->insert($data);
         return $res;
     }
