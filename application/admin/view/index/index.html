@@ -161,9 +161,26 @@
                     <i class="iconfont nav_right">&#xe697;</i></a>
                 <ul class="sub-menu">
                     <li>
-                        <a onclick="xadmin.add_tab('用户列表','/admin/User/')">
+                        <a onclick="xadmin.add_tab('待激活','/admin/user/index?status=0')">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>用户列表</cite></a>
+                            <cite>待激活</cite>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('已激活','/admin/user/index?status=1')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>已激活</cite>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('已锁定','/admin/user/index?status=2')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>已锁定</cite>
+                        </a>
                     </li>
                 </ul>
             </li>

@@ -13,24 +13,23 @@ class User extends Controller
      *
      * @return \think\Response
      */
-    public function index()
+    public function getindex(Request $request)
     {
+        $where = $request->get('');
         // 查询状态为1的用户数据 并且每页显示10条数据
-                $list = Db::table('users')->paginate(10);
+        $list = Db::table('users')->where($where)->paginate(10);
         // 把分页数据赋值给模板变量list
-                $this->assign('list', $list);
+        $this->assign('list', $list);
         // 渲染模板输出
-                return $this->fetch('index');
+        return $this->fetch('index');
     }
 
-    /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
-     */
-    public function create()
+    public function postupdate(Request $request)
     {
-        //
+        $where = $request->get('');
+        $data = $request->post();
+        $res = Db::table('users')->where($where)->update($data);
+        return $res;
     }
 
     /**
