@@ -84,6 +84,7 @@ class Login extends Controller{
             return returnApi(10004,'手机号已经注册','');
         }
         $data['passwd'] = md5('dongyi'.$request->post('passwd'));
+        $data['create_time'] = date('Y-m-d H:i:s');
         $res = Db::table('users')->insert($data);
         if($res){
            return returnApi(0,'注册成功','');
@@ -104,7 +105,33 @@ class Login extends Controller{
             return returnApi(10007,'更新失败','');
         }
     }
-    
+
+    public function getupversion(Request $request)
+    {
+        $appid = $request->get('appid');
+        $version = $request->get('version'); //客户端版本号
+        $system = $request->get('system');
+        if($version == '1.0.0'){
+            $rsp = array("status" => 0); //默认返回值，不需要升级
+        }else{
+            if($system=='android'){
+                $rsp["status"] = 1;
+                $rsp["note"] = "新增部分功能，请升级;"; //release notes
+                $rsp["url"] = "http://dy.sir6.cn/1.00/dongyi_101.apk"; //应用升级包下载地址
+            }else{
+                $rsp["status"] = 1;
+                $rsp["note"] = "新增部分功能，请升级;"; //release notes
+                $rsp["url"] = "http://dy.sir6.cn/1.00/dongyi_101.ios"; //应用升级包下载地址
+            }
+
+            /**
+             * 默认不更新
+             */
+            $rsp = array("status" => 0);
+        }
+        return $rsp;
+    }
+
     /**
      * 展示验证码
      * @return \think\Response

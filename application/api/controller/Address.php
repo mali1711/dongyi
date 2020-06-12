@@ -33,7 +33,7 @@ class Address extends Controller{
      */
     public function postsave(Request $request)
     {
-        $res = $this->_find($request->get('user_id'));
+        $res = $this->_find($request->post('user_id'));
         $data = $request->post();
         if($res == null){
             $resu = $this->_insert($data);

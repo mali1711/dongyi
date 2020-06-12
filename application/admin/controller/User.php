@@ -29,7 +29,12 @@ class User extends Controller
         $where = $request->get('');
         $data = $request->post();
         $res = Db::table('users')->where($where)->update($data);
-        return $res;
+        if ($res){
+             $result=array('err'=>'0','msg'=>'操作成功');
+        }else{
+            $result = array('err'=>'1','msg'=>'操作失败');
+        }
+        return $result;
     }
 
     /**

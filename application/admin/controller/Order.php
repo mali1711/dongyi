@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use think\Controller;
+use think\Db;
 use think\Request;
 
 class Order extends Controller
@@ -12,13 +13,26 @@ class Order extends Controller
      *
      * @return \think\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        echo 2222;
+        if($request->get('status')==NULL){
+            $list = Db::table('order')->paginate(6);
+        }else{
+            $where['status'] = $request->get('status');
+            $list = Db::table('order')->where($where)->paginate(6)->appends($where);
+        }
+
+        $data = $list->items();
+        foreach ($list->items() as $k=>$v){
+            $data[$k]['st_info'] = json_decode($v['st_info']);
+            $data[$k]['pr_info'] = json_decode($v['pr_info']);
+        }
+        $this->assign('data', $data);
+        $this->assign('list', $list);
+        return $this->fetch('index');
     }
 
-
+    
     /**
      * 显示创建资源表单页.
      *
@@ -49,6 +63,12 @@ class Order extends Controller
     public function read($id)
     {
         //
+        $list = Db::table('order')->find($id);
+        $list['st_info'] = json_decode($list['st_info']);
+        $list['pr_info'] = json_decode($list['pr_info']);
+        $list['subtime'] = date('Y-m-d H:i:s',$list['subtime']);
+        $this->assign('list', $list);
+        return $this->fetch();
     }
 
     /**
@@ -60,6 +80,8 @@ class Order extends Controller
     public function edit($id)
     {
         //
+        echo 1111;
+        $this->fetch();
     }
 
     /**
