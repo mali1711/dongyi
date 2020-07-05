@@ -5,7 +5,7 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Request;
 
-class Index extends Controller
+class Index extends Common
 {
     /**
      * 显示资源列表

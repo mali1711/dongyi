@@ -6,7 +6,7 @@ use think\Controller;
 use think\Db;
 use think\Request;
 
-class User extends Controller
+class User extends Common
 {
     /**
      * 显示资源列表

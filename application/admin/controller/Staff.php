@@ -5,9 +5,11 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Db;
 use think\Request;
+use think\Session;
 
-class Staff extends Controller
+class Staff extends Common
 {
+
     /**
      * 显示资源列表
      *

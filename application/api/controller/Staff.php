@@ -108,6 +108,13 @@ class Staff extends Controller
      */
     public function read($id,Request $request)
     {
+        $data = Db::table('staff')->find($id);
+        if(empty($data)){
+            $this->result('','10000','数据获取失败');
+        }else{
+            $this->result($data,'0','数据获取成功');
+        }
 
     }
+
 }

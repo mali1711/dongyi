@@ -31,6 +31,7 @@ use think\Route;
  * 后台登陆
  */
 Route::group('admin',function (){
+    Route::resource('/login', 'admin/login');
     Route::resource('/index', 'admin/Index');
     Route::resource('/order', 'admin/Order');
     Route::resource('/project', 'admin/Project');
@@ -47,7 +48,7 @@ Route::group('api', function () {
     Route::resource('/staff', 'api/Staff');
     Route::resource('/project', 'api/Project');
     Route::controller('/order', 'api/Order');
-    Route::controller('/login', 'api/Login');
+    Route::controller('/login', 'api/login');
     Route::controller('/user', 'api/User');
     Route::controller('/address', 'api/Address');
     Route::controller('/managetime', 'api/ManageTime');//时间管理
@@ -79,7 +80,7 @@ Route::group('backstage',function (){
     Route::controller('/order', 'backstage/Order');
     Route::controller('/project', 'backstage/Project');
     Route::controller('/shop', 'backstage/Shop');
-    Route::controller('/login', 'backstage/Login');
+    Route::controller('/login', 'backstage/login');
 });
 
 

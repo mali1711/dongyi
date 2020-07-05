@@ -6,7 +6,7 @@ use think\Controller;
 use think\Db;
 use think\Request;
 
-class Shop extends Controller
+class Shop extends Common
 {
     /**
      * 显示资源列表
