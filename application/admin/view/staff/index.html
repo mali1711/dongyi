@@ -87,7 +87,7 @@
             console.log(obj)
             switch(obj.event){
                 case 'add':
-                    xadmin.open('添加项目','/admin/staff/create',700,700);
+                    xadmin.open('添加技师','/admin/staff/create',900,700);
                     break;
                 case 'delete':
                     layer.open('编辑','/admin/project/10/edit')
@@ -133,7 +133,7 @@
             } else if(layEvent === 'edit'){ //编辑
                 //do something
                 id = data.st_id;
-                xadmin.open('编辑','/admin/staff/'+id+'/edit',700,700);
+                xadmin.open('编辑','/admin/staff/'+id+'/edit',900,700);
                 //同步更新缓存对应的值
 
 /*

@@ -29,7 +29,8 @@
 
         }
         .layui-upload-list img{
-            width: 90px;
+            width: 96px;
+            margin-right: 5px;
         }
     </style>
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -75,6 +76,18 @@
             <span class="x-red">*</span></div>
     </div>
     <div class="layui-form-item">
+        <label for="s_time" class="layui-form-label">
+            <span class="x-red">*</span>经纬度：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input"  autocomplete="off" name="Longitude" value="{$Longitude}" id="">
+        </div>
+        <div class="layui-input-inline">
+            <input class="layui-input"  autocomplete="off" name="latitude" value="{$latitude}" id="">
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            <span class="x-red"></span></div>
+    </div>
+    <div class="layui-form-item">
         <label for="desc" class="layui-form-label">个人简介</label>
         <div class="layui-input-block">
             <textarea placeholder="请输入内容" id="desc" name="desc" class="layui-textarea">{$desc}</textarea>
@@ -112,11 +125,19 @@
                 <button type="button" class="layui-btn" id="pic_5">
                     <i class="layui-icon">&#xe67c;</i>你的健康证
                 </button>
+                <button type="button" class="layui-btn" id="pic_6">
+                    <i class="layui-icon">&#xe67c;</i>生活照一
+                </button>
+                <button type="button" class="layui-btn" id="pic_7">
+                    <i class="layui-icon">&#xe67c;</i>生活照二
+                </button>
                 <input class="layui-btn" type="hidden" name="pic_1" value="{$pic_1}">
                 <input class="layui-btn" type="hidden" name="pic_2" value="{$pic_2}">
                 <input class="layui-btn" type="hidden" name="pic_3" value="{$pic_3}">
                 <input class="layui-btn" type="hidden" name="pic_4" value="{$pic_4}">
                 <input class="layui-btn" type="hidden" name="pic_5" value="{$pic_5}">
+                <input class="layui-btn" type="hidden" name="pic_5" value="{$pic_6}">
+                <input class="layui-btn" type="hidden" name="pic_5" value="{$pic_7}">
                 <div class="upimg">
                     <div class="layui-upload-list">
                         <img class="layui-upload-img" id="pic_1msg" src="/uploads/{$pic_1}" />
@@ -124,6 +145,8 @@
                         <img class="layui-upload-img" id="pic_3msg" src="/uploads/{$pic_3}" />
                         <img class="layui-upload-img" id="pic_4msg" src="/uploads/{$pic_4}" />
                         <img class="layui-upload-img" id="pic_5msg" src="/uploads/{$pic_5}" />
+                        <img class="layui-upload-img" id="pic_6msg" src="/uploads/{$pic_6}" />
+                        <img class="layui-upload-img" id="pic_7msg" src="/uploads/{$pic_7}" />
                     </div>
 
                 </div>
@@ -245,6 +268,44 @@
                 //预读本地文件示例，不支持ie8
                 obj.preview(function(index, file, result){
                     $('#pic_5msg').attr('src', result); //图片链接（base64）
+                });
+            }
+        });
+        var uploadInst = upload.render({
+            elem: '#pic_6'
+            ,url: '/admin/files/upload'
+            ,field:'pic'
+            ,done: function(data){
+                //上传完毕回调
+                console.log(data)
+                $(" input[ name='pic_6' ] ").val(data.src)
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#pic_6msg').attr('src', result); //图片链接（base64）
+                });
+            }
+        });
+        var uploadInst = upload.render({
+            elem: '#pic_7'
+            ,url: '/admin/files/upload'
+            ,field:'pic'
+            ,done: function(data){
+                //上传完毕回调
+                console.log(data)
+                $(" input[ name='pic_7' ] ").val(data.src)
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#pic_7msg').attr('src', result); //图片链接（base64）
                 });
             }
         });
