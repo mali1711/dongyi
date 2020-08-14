@@ -27,7 +27,6 @@ class Address extends Controller{
         return $result;
     }
 
-
     /**
      * 更改信息
      */

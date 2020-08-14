@@ -48,7 +48,7 @@
                             <th>价格</th>
                             <th>客户姓名</th>
                             <th style="width: 50px;">简介</th>
-                            <th>加购价格</th>
+                            <th>服务技师</th>
                             <th>联系方式</th>
                             <th>下单时间</th>
                             <th>状态</th>
@@ -61,7 +61,7 @@
                             <td>{$vo.total_price}¥</td>
                             <td>{$vo.address_contacts}</td>
                             <td class="desc">{$vo.pr_info->desc}</td>
-                            <td>{$vo.pr_info->add_purchase_price}</td>
+                            <td>{$vo.st_info->name}</td>
                             <td>{$vo.address_mobile}</td>
                             <td>{$vo.create_time}</td>
                             <td>
@@ -71,13 +71,19 @@
                                 {case value="2"}<button type="button" class="layui-btn layui-btn-warm layui-btn-radius">已完成</button>{/case}
                                 {default /}default
                                 {/switch}
-
                             </td>
                             <td class="td-manage">
                                 <a title="查看" onclick="xadmin.open('详情','/admin/order/{$vo.order_id}')" href="javascript:;">
                                     <i class="layui-icon">&#xe63c;</i></a>
                                 <a title="删除" onclick="member_del(this)" href="javascript:;">
                                     <i class="layui-icon">&#xe640;</i></a>
+                                {switch name="vo.status"}
+                                {case value="0"}
+                                    <a title="修改" onclick="xadmin.open('修改','/admin/order/{$vo.order_id}/edit',width=1000)" href="javascript:;">
+                                    <i class="layui-icon">&#xe642;</i></a>
+                                {/case}
+
+                                {/switch}
                             </td>
                         </tr>
                         {/volist}

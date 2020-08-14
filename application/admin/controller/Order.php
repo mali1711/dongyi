@@ -2,11 +2,15 @@
 
 namespace app\admin\controller;
 
+use app\admin\model\OrderModel;
+use app\admin\model\StaffModel;
+use app\base\controller\Base;
 use think\Controller;
 use think\Db;
 use think\Request;
+use \app\admin\model\Staff;
 
-class Order extends Common
+class Order extends Base
 {
     /**
      * 显示资源列表
@@ -42,18 +46,6 @@ class Order extends Common
     {
         //
     }
-
-    /**
-     * 保存新建的资源
-     *
-     * @param  \think\Request  $request
-     * @return \think\Response
-     */
-    public function save(Request $request)
-    {
-        //
-    }
-
     /**
      * 显示指定的资源
      *
@@ -80,8 +72,14 @@ class Order extends Common
     public function edit($id)
     {
         //
-        echo 1111;
-        $this->fetch();
+        $list = Db::table('order')->find($id);
+        $list['st_info'] = json_decode($list['st_info']);
+        $list['pr_info'] = json_decode($list['pr_info']);
+        $slist = StaffModel::field('st_id,name,nickname')->select();
+        $list['subtime'] = date('Y-m-d H:i:s',$list['subtime']);
+        $this->assign('slist', $slist);
+        $this->assign('list', $list);
+        return $this->fetch();
     }
 
     /**
@@ -94,6 +92,21 @@ class Order extends Common
     public function update(Request $request, $id)
     {
         //
+
+        $update = $request->put();
+        $orderUpdate = OrderModel::get($id);
+        $update['st_info'] = json_encode(StaffModel::get($update['st_id']));
+        $update['st_info_ord'] = $orderUpdate->st_info;
+        $update['notice'] = 1;
+        $update['order_id'] = $id;
+        $res = OrderModel::update($update);
+        if($res){
+            return self::showReturnCodeWithOutData(1001);
+        }else{
+            return self::showReturnCodeWithOutData(1002);
+        }
+
+
     }
 
     /**
