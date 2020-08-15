@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/layui/css/layui.css"  media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+    <style>
+        .hours{
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend>技师时间列表</legend>
+</fieldset>
+
+<div id="app" class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title">
+        {volist name="list" id="vo" key="k" empty="暂时没有数据" }
+            {switch name="k"}
+            {case value="1"}
+                <li @click="gettime($event)" :data-date="{$vo}" date="{$vo}" class="dateList layui-this">{$vo}</li>
+            {/case}
+            {default /}
+                <li @click="gettime($event)" :data-date="{$vo}" date="{$vo}" class="dateList">{$vo}</li>
+            {/switch}
+        {/volist}
+    </ul>
+    <div class="layui-tab-content" style="height: 200px;">
+        <div class="layui-tab-item layui-show">
+            <div class="layui-row layui-col-md12">
+                <div class="hours layui-col-md2" v-for="site in sites"><button class="layui-btn layui-btn-radius layui-btn-primary">
+                    {{site.name}}:00<small style="color: orangered">(已锁)</small>
+                </button></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="/admin/x-admin2/lib/layui/layui.js" charset="utf-8"></script>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+
+</script>
+<script>
+    layui.use('element', function(){
+
+    });
+
+    let st = new Vue({
+        el: '#app',
+        data: {
+            sites: [
+                { name: 'Runoob' },
+                { name: 'Google' },
+                { name: 'Taobao' }
+            ]
+        },
+        methods: {
+            gettime: function (event) {
+                tt = this;
+                console.info(event.target.getAttribute('date'))
+                axios.get('/admin/staffmanagetime/'+event.target.getAttribute('date'), {
+                    params: {
+                        st_id: {}
+                    }
+                })
+                    .then(function (response) {
+                       return  tt.sites = response.data.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+            }
+        }
+    })
+</script>
+</body>
+</html>

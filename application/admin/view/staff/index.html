@@ -32,12 +32,11 @@
     </span>
 </div>
 <div id="userBar" class="layui-btn-group" style="display: none">
-    <button type="button" class="layui-btn layui-btn-sm" lay-event="edit">
-        <i class="layui-icon">&#xe642;</i>
-    </button>
-    <button type="button" class="layui-btn layui-btn-sm" lay-event="del">
-        <i class="layui-icon">&#xe640;</i>
-    </button>
+    <div class="layui-btn-group">
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="edit">修改</button>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-event="del">删除</button>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="editTime">时间</button>
+    </div>
 </div>
 <div class="layui-btn-group" id="addSatff" style="display:none;">
     <button type="button" class="layui-btn" lay-event="add">增加</button>
@@ -77,23 +76,12 @@
                 {field:'nickname',title:'昵称'},
                 {field:'iphone',title:'接单手机号'},
                 {field:'desc',title:'简介'},
-                {fixed:'right',field:'desc',title:'操作',toolbar:'#userBar',width:'150',align:'center'},
+                {fixed:'right',field:'desc',title:'操作',toolbar:'#userBar',width:'200',align:'center'},
 
             ]]
         })
 
-        table.on('toolbar(userTable)', function(obj){
-            var checkStatus = table.checkStatus(obj.config.id);
-            console.log(obj)
-            switch(obj.event){
-                case 'add':
-                    xadmin.open('添加技师','/admin/staff/create',900,700);
-                    break;
-                case 'delete':
-                    layer.open('编辑','/admin/project/10/edit')
-                    break;
-            };
-        });
+
 
         table.on('tool(userTable)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
@@ -126,9 +114,6 @@
                         }
 
                     });
-/*                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                    layer.close(index);*/
-                    //向服务端发送删除指令
                 });
             } else if(layEvent === 'edit'){ //编辑
                 //do something
@@ -136,42 +121,17 @@
                 xadmin.open('编辑','/admin/staff/'+id+'/edit',900,700);
                 //同步更新缓存对应的值
 
-/*
-                obj.update({
-                    nickname: '1111'
-                });
-
-                */
             } else if(layEvent === 'LAYTABLE_TIPS'){
                 layer.alert('Hi，头部工具栏扩展的右侧图标。');
+            } else if(layEvent === 'editTime'){ //编辑
+                //do something
+                id = data.st_id;
+                xadmin.open('编辑','/admin/staffmanagetime?st_id='+id,1200,420);
+                //同步更新缓存对应的值
+
             }
         });
 
-        // /admin/staff/all
-        //方法级渲染
-/*
-        var $ = layui1.$, active = {
-            reload: function(){
-                var demoReload = $('#demoReload');
-
-                //执行重载
-                table.reload('testReload', {
-                    page: {
-                        curr: 1 //重新从第 1 页开始
-                    }
-                    ,where: {
-                        key: {
-                            id: demoReload.val()
-                        }
-                    }
-                }, 'data');
-            }
-        };
-
-        $('.demoTable .layui1-btn').on('click', function(){
-            var type = $(this).data('type');
-            active[type] ? active[type].call(this) : '';
-        });*/
     });
 </script>
 

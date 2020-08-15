@@ -52,7 +52,7 @@ class ManageTime extends Controller{
     {
         $startTime = date('Y').'-'.$time;
         $endTime = date('Y-m-d',strtotime($startTime)+86400);
-        $timelist1 = Db::table('staff_managetime')
+        $timelist1 = Db::table('staffManagetime')
             ->where('st_id',$st_id)
             ->where('lockingtime','between time',[$startTime,$endTime])
             ->column('lockingtime');//获取锁定的时间

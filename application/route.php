@@ -37,6 +37,7 @@ Route::group('admin',function (){
     Route::resource('/project', 'admin/Project');
     Route::controller('/files', 'admin/Files');
     Route::resource('/staff', 'admin/Staff');
+    Route::resource('/staffManagetime', 'admin/StaffManagetime');
     Route::resource('/shop', 'admin/Shop');
     Route::controller('/user', 'admin/User');
 });
