@@ -24,18 +24,20 @@
         {volist name="list" id="vo" key="k" empty="暂时没有数据" }
             {switch name="k"}
             {case value="1"}
-                <li @click="gettime($event)" :data-date="{$vo}" date="{$vo}" class="dateList layui-this">{$vo}</li>
+                <li v-trigger @click="gettime($event)" :data-date="{$vo}" date="{$vo}" class="dateList layui-this">{$vo}</li>
             {/case}
             {default /}
                 <li @click="gettime($event)" :data-date="{$vo}" date="{$vo}" class="dateList">{$vo}</li>
             {/switch}
         {/volist}
     </ul>
-    <div class="layui-tab-content" style="height: 200px;">
+    <div class="layui-tab-content" style="height: 500px;">
         <div class="layui-tab-item layui-show">
             <div class="layui-row layui-col-md12">
-                <div class="hours layui-col-md2" v-for="site in sites"><button class="layui-btn layui-btn-radius layui-btn-primary">
-                    {{site.name}}:00<small style="color: orangered">(已锁)</small>
+                <div @click="locktime(key)" class="hours layui-col-md4" v-for="(site,key) in sites"><button class="layui-btn layui-btn-radius layui-btn-primary">
+                    {{site.name}}:00
+                    <small v-if="site.lock"  style="color: orangered">(已锁)</small>
+                    <small v-else  style="color: darkgreen">(工作)</small>
                 </button></div>
             </div>
         </div>
@@ -51,38 +53,69 @@
 
 </script>
 <script>
-    layui.use('element', function(){
+    layui.use(['form'], function(){
+        var layer = layui.layer
 
-    });
 
     let st = new Vue({
         el: '#app',
         data: {
             sites: [
-                { name: 'Runoob' },
+                { name: 'Runoob',lock:true },
                 { name: 'Google' },
                 { name: 'Taobao' }
-            ]
+            ],
+            nowDate:'',
+            st_id:{$st_id}
+        },mounted () {
+            $('layui-this').trigger('click')
         },
         methods: {
             gettime: function (event) {
+                $('.layui-this').removeClass('layui-this');
+                event.target.setAttribute('class','dateList layui-this')
                 tt = this;
-                console.info(event.target.getAttribute('date'))
-                axios.get('/admin/staffmanagetime/'+event.target.getAttribute('date'), {
+                tt.nowDate = event.target.getAttribute('date')
+                axios.get('/admin/staffmanagetime/'+tt.st_id, {
                     params: {
-                        st_id: {}
+                        day:event.target.getAttribute('date')
                     }
                 })
                     .then(function (response) {
+                        console.log(response.data.data);
                        return  tt.sites = response.data.data;
+
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
+            },
+            locktime: function (key) {
+                tt = this;
+                axios.post('/admin/staffmanagetime', {
+                        st_id:tt.st_id,
+                        lockingtime:tt.nowDate + ' ' +tt.sites[key].name+':00:00',
+                        lock:+tt.sites[key].lock
+                })
+                    .then(function (response) {
+                        layer.msg(response.data.msg,{icon: 1});
+                        tt.sites[key].lock = !tt.sites[key].lock;
 
+                    })
+                    .catch(function (error) {
+                        layer.msg(response.data.msg,{icon: 2});
+                        console.log(error);
+                    });
             }
-        }
+        },directives:{
+            trigger:{
+                inserted(el,binging){
+                    el.click()
+                }
+            }
+        },
     })
+    });
 </script>
 </body>
 </html>
