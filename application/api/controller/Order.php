@@ -5,9 +5,11 @@ namespace app\api\controller;
 use app\staff\model\Orders;
 use think\Controller;
 use think\Db;
+use think\Loader;
+use think\Log;
 use think\Request;
 use think\Session;
-
+Loader::import('alipayrsa2.AliPay');
 class Order extends Controller
 {
 
@@ -21,8 +23,9 @@ class Order extends Controller
     {
 
         //
-        $data = $request->post();
+
         Db::startTrans();
+        $data = $request->post();
         $data['user_id'] = $request->post('user_id');
         $data['st_id'] = $request->post('st_id');
         $data['pr_id'] = $request->post('pr_id');
@@ -177,6 +180,110 @@ class Order extends Controller
     }
 
     /**
-     *
+     * 阿里支付-直接支付
+     * @param Request $request
+     * @author mali
+     * @date 2020/9/2 10:38 上午
      */
+    public function postaliPay(Request $request)
+    {
+        $data = $this->_initOrderInfo($request);
+        return $this->_saveOrder($data);
+    }
+
+    /**
+     * 保存订单
+     * @author mali
+     * @date 2020/9/2 5:05 下午
+     */
+    public function _saveOrder($data)
+    {
+        $data['status'] = -1;//当前状态设置成未支付
+        $res = Db::table('order')->insert($data);//订单存放到数据库中
+
+        if($res){
+            $total = floatval($data['total_price']);
+            $out_trade_no = date('YmdHis').rand();
+            $data = array(
+                'total'=>$total,
+                'out_trade_no'=>$out_trade_no
+            );
+            Log::record($data,'zhifuxinxi');
+            $foo = new \AliPay();
+            $notify_url = Request::instance()->domain().'/api/Api/notify_url';
+            $orderinfo =  $foo->topay($total,'董杨支付','董亿个人中心账号余额充值，详情请查看app',$out_trade_no,$notify_url);
+            return $orderinfo;
+        }else{
+
+        }
+    }
+
+    /**
+     * 支付宝订单直接支付回调
+     * @param Request $request
+     * @author mali
+     * @date 2020/9/2 10:40 上午
+     */
+    public function postaliPayNotify(Request $request)
+    {
+        $log = array(
+            'name'=>'zhangsan',
+            'pass'=>1231
+        );
+        Log::write($log,'alipay');
+    }
+    
+    /**
+     * 微信支付-直接付款
+     * @param Request $request
+     * @author mali
+     * @date 2020/9/2 10:38 上午
+     */
+    public function wxPay(Request $request)
+    {
+
+    }
+
+    /**
+     * 支付宝订单直接支付回调
+     * @param Request $request
+     * @author mali
+     * @date 2020/9/2 10:40 上午
+     */
+    public function wxPayNotify(Request $request)
+    {
+
+    }
+
+    /**
+     * 订单初始化
+     * @author mali
+     * @date 2020/9/2 4:40 下午
+     */
+    protected function _initOrderInfo($request)
+    {
+        $data = $request->post();
+        $data['user_id'] = $request->post('user_id');
+        $data['st_id'] = $request->post('st_id');
+        $data['pr_id'] = $request->post('pr_id');
+        $data['create_time'] = date('Y-m-d H:i:s');
+        $data['subtime'] = strtotime(date('Y').'-'.$request->post('subtime'),time());//预约时间
+        $st_info = Db::table('staff')->where('st_id',$data['st_id'])->find();
+        $pr_info = Db::table('project')->where('pr_id',$data['pr_id'])->find();
+        $data['st_info'] = json_encode($st_info);
+        $data['pr_info'] = json_encode($pr_info);
+        $data['add_purchase_num'] = 0;//加购数量
+        $data['add_purchase_minimum'] = $pr_info['min_num'];//最低加购数量
+        $data['title'] = $pr_info['title'];//项目名称
+        $data['add_purchase_desc'] = $pr_info['add_purchase_desc'];//加购简介
+        $data['add_purchase_price'] = $pr_info['add_purchase_price'];//加购单价
+        $data['add_purchase_tprice'] = 0;//加购总价
+        $data['address'] = $request->post('address');//地址
+        $data['address_contacts'] = $request->post('address_contacts');//联系人
+        $data['address_mobile'] = $request->post('address_mobile');//手机号
+        $data['order_number'] = date('YmdHis').rand(100,999);
+        $data['subsidy'] = 0;//路费补助
+        $data['total_price'] = $pr_info['price'];//订单总价,不含加价
+        return $data;
+    }
 }
