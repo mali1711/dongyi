@@ -62,3 +62,9 @@ function sendmsg($param,$mobile){
     $options['token']='eb78c6b89891c71f8769ce7909c39a25';
     new \sms\Ucpaas\Ucpaas();
 }
+
+
+function JSONReturn($result)
+{
+    return json_encode($result,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+}

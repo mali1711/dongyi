@@ -203,15 +203,11 @@ class Order extends Controller
 
         if($res){
             $total = floatval($data['total_price']);
-            $out_trade_no = date('YmdHis').rand();
-            $data = array(
-                'total'=>$total,
-                'out_trade_no'=>$out_trade_no
-            );
-            Log::record($data,'zhifuxinxi');
+            $total = 0.01;
+            $out_trade_no = $data['order_number'];
             $foo = new \AliPay();
-            $notify_url = Request::instance()->domain().'/api/Api/notify_url';
-            $orderinfo =  $foo->topay($total,'董杨支付','董亿个人中心账号余额充值，详情请查看app',$out_trade_no,$notify_url);
+            $notify_url = Request::instance()->domain().'/api/order/aliPayNotify';
+            $orderinfo =  $foo->topay($total,'董杨支付','董杨商品购买',$out_trade_no,$notify_url);
             return $orderinfo;
         }else{
 
@@ -224,15 +220,11 @@ class Order extends Controller
      * @author mali
      * @date 2020/9/2 10:40 上午
      */
-    public function postaliPayNotify(Request $request)
+    public function getaliPayNotify(Request $request)
     {
-        $log = array(
-            'name'=>'zhangsan',
-            'pass'=>1231
-        );
-        Log::write($log,'alipay');
+        Log::mylog('支付回调-get',$request->get(''));
     }
-    
+
     /**
      * 微信支付-直接付款
      * @param Request $request
