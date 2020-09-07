@@ -223,6 +223,16 @@ class Order extends Controller
     public function getaliPayNotify(Request $request)
     {
         Log::mylog('支付回调-get',$request->get(''));
+        $order = new Orders();
+        $data['status'] = 1;
+        $where['order_number'] = $request->get('out_trade_no');
+        $res = $order->save($data,$where);
+        if($res){
+            echo 'SUCCESS';
+        }else{
+            echo "ERROR";
+        }
+        die();
     }
 
     /**
