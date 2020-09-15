@@ -50,13 +50,13 @@
                     dataType:'JSON',
                     success:function(res){
                         console.log(res);
-                        if(res.err='0'){
+                        if(res.err=='0'){
                             layer.msg('登陆成功',function(){
                                      location.href='index.html'
                                  });
                         }
                         else
-                            layer.msg('登陆失败',function(){
+                            layer.msg(res.msg,function(){
 
                             });
                     },

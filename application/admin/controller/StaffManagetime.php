@@ -20,10 +20,14 @@ class StaffManagetime extends Base
         $tlist = $this->get_weeks();
         $this->assign('list',$tlist);
         $this->assign('st_id',$request->param('st_id'));
-        return $this->fetch('staffManagetime/index');
+        if($request->param('app')=='yes'){
+            return $this->fetch('staffManagetime/index_app');
+        }else{
+            return $this->fetch('staffManagetime/index');
+        }
+
 
     }
-
     /**
      * 保存新建的资源
      *

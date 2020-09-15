@@ -5,7 +5,7 @@
     <title>技师时间管理</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.1, initial-scale=0.58,target-densitydpi=low-dpi" />
     <link rel="stylesheet" href="/static/layui/css/layui.css"  media="all">
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
     <style>
@@ -31,10 +31,10 @@
         {/switch}
         {/volist}
     </ul>
-    <div class="layui-tab-content" style="height: 500px;">
+    <div class="layui-tab-content" style="height: 1500px;">
         <div class="layui-tab-item layui-show">
-            <div class="layui-row layui-col-md12">
-                <div @click="locktime(key)" class="hours layui-col-md4" v-for="(site,key) in sites"><button class="layui-btn layui-btn-radius layui-btn-primary">
+            <div class="layui-row layui-col-md-offset12">
+                <div style="width: 150px;float: left" @click="locktime(key)" class="hours layui-col-md-offset3" v-for="(site,key) in sites"><button class="layui-btn layui-btn-radius layui-btn-primary">
                     {{site.name}}:00
                     <small v-if="site.lock"  style="color: orangered">(已锁)</small>
                     <small v-else  style="color: darkgreen">(工作)</small>
@@ -82,12 +82,12 @@
                         }
                     })
                         .then(function (response) {
-                            console.log(response.data.data);
+
                             return  tt.sites = response.data.data;
 
                         })
                         .catch(function (error) {
-                            console.log(error);
+
                         });
                 },
                 locktime: function (key) {
@@ -104,7 +104,6 @@
                         })
                         .catch(function (error) {
                             layer.msg(response.data.msg,{icon: 2});
-                            console.log(error);
                         });
                 }
             },directives:{
