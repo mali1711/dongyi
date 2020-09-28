@@ -116,4 +116,25 @@ class ManageTime extends Controller{
         );
         Db::table('order')->where($where)->where('create_time','between time',['2015-1-1','2016-1-1']);
     }
+
+    /**
+     *
+     * @param $st_id 用户id
+     * @param $startTime 开始时间(时间戳)
+     * @param int $time 被锁时间长度（半个小时一个单位）
+     * @author mali
+     * @date 2020/9/28 2:27 下午
+     */
+    static function getloctTime($st_id='',$startTime='',$Locktime='')
+    {
+        $data = array();
+        $st_id = 1;
+        $startTime = time();
+        for ($i=1;$i<=$Locktime;$i++){
+            $data[$i]['st_id'] = $st_id;
+            $data[$i]['lockingtime'] = date('Y-m-d H:i:s',($startTime+30*$Locktime));
+            $data[$i]['create_time'] = date('Y-m-d H:i:s');
+        }
+        $res =  Db::table('staff_managetime')->insertAll($data);
+    }
 }

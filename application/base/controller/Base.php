@@ -12,7 +12,7 @@ class Base extends Controller
         $return_data = [
             'code' => '500',
             'msg' => '未定义消息',
-            'data' => $code == 1001 ? $data : [],
+            'data' => (($code == 200)or($code == 1001)) ? $data : (object)[],
         ];
         if (empty($code)) return $return_data;
         $return_data['code'] = $code;
@@ -26,7 +26,6 @@ class Base extends Controller
 
     static public function showReturnCodeWithOutData($code = '', $msg = '')
     {
-        return self::showReturnCode($code,[],$msg);
-
+        return self::showReturnCode($code,(object)[],$msg);
     }
 }

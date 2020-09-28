@@ -2,6 +2,7 @@
 
 namespace app\api\controller;
 
+use app\base\controller\Base;
 use app\staff\model\Orders;
 use think\Controller;
 use think\Db;
@@ -9,8 +10,9 @@ use think\Loader;
 use think\Log;
 use think\Request;
 use think\Session;
+use app\api\logic\BalanceLogic;
 Loader::import('alipayrsa2.AliPay');
-class Order extends Controller
+class Order extends Base
 {
 
     /**
@@ -60,6 +62,7 @@ class Order extends Controller
             Db::rollback();
         }else{
             $res = Db::table('order')->insert($data);
+            ManageTime::getloctTime($data['st_id'],$data['subtime'],4);
             if($res){
                 Db::table('staff')->where('st_id',$data['st_id'])->setInc('order_number',1);
                 $result = array(
@@ -131,9 +134,10 @@ class Order extends Controller
     {
         $where['order_id'] = $request->get('order_id');
         $res = Db::table('order')->where($where)->find();
+        if($res==null)return self::showReturnCodeWithOutData(1010);
         $res['st_info'] = json_decode($res['st_info']);
         $res['pr_info'] = json_decode($res['pr_info']);
-        return $res;
+        return self::showReturnCode('200',$res);
     }
 
     /**
@@ -146,38 +150,27 @@ class Order extends Controller
         $where['order_id'] = $request->post('order_id');
         $user_id = $request->post('user_id');
         $res = Db::table('order')->where($where)->find();
+        if($res==null) return self::showReturnCodeWithOutData(1004,'订单信息不存在');
         $add_purchase_num = $request->post('add_purchase_num');//加购数量
         $total = $res['add_purchase_price']*$add_purchase_num;//加购单价 todo 需调用金额扣除接口
-        $baresult = Db::table('balance')->where('users_id',$user_id)->setDec('balance',$total);
-        if(!$baresult){
-            $result = array(
-                'msg'=>'余额不足',
-                'err'=>3,
-                'add_purchase_num'=>$add_purchase_num
-            );
+        $bresult = BalanceLogic::deductBalance($user_id,$total);
+        if($bresult['code']!=200){
             Db::rollback();
-            return $result;
+            return self::showReturnCodeWithOutData($bresult['code']);
+
         }
         $res = Db::table('order')->where($where)->setInc('add_purchase_num',$add_purchase_num);
         $add_purchase_num+=$add_purchase_num;//加购完以后的数量
         if($res){
-            $result = array(
-                'msg'=>'加价成功',
-                'err'=>0,
-                'add_purchase_num'=>$add_purchase_num
-            );
             Db::commit();
+            return self::showReturnCodeWithOutData(200,'',(object)[]);
         }else{
-            $result = array(
-                'msg'=>'意外错误',
-                'err'=>1,
-                'add_purchase_num'=>$add_purchase_num
-            );
             Db::rollback();
+            return self::showReturnCodeWithOutData(2002);
         }
-
-        return $result;
     }
+
+
 
     /**
      * 阿里支付-直接支付
@@ -234,7 +227,25 @@ class Order extends Controller
         }
         die();
     }
-
+    /**
+     * 支付宝订单直接支付回调
+     * @param Request $request
+     * @author mali
+     * @date 2020/9/2 10:40 上午
+     */
+    public function postaliPayNotify(Request $request)
+    {
+        Log::mylog('支付回调-post',$request->post(''));
+        $order = new Orders();
+        $data['status'] = 0;
+        $where['order_number'] = $request->post('out_trade_no');
+        $res = $order->save($data,$where);
+        if($res){
+            echo 'SUCCESS';
+        }else{
+            echo "ERROR";
+        }
+    }
     /**
      * 微信支付-直接付款
      * @param Request $request

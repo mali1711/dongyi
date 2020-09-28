@@ -81,7 +81,7 @@ class TimeManagement extends Controller{
         $s = strtotime($time);
         $startTime = date('Y-m-d',$s);
         $endTime = date('Y-m-d',$s+86400);
-        $timelist = Db::table('staffManagetime')->where('st_id',$st_id)
+        $timelist = Db::table('staff_managetime')->where('st_id',$st_id)
         ->where('lockingtime','between time',[$startTime,$endTime])->column('lockingtime');
         return $timelist;
     }
@@ -133,9 +133,9 @@ class TimeManagement extends Controller{
         $time =  $request->get('time');
         $where['lockingtime'] = date('Y-').$time;
         $where['st_id'] = $request->get('st_id');
-        $resu = Db::table('staffManagetime')->where($where)->find();
+        $resu = Db::table('staff_managetime')->where($where)->find();
         if($resu){
-            $res2 = Db::table('staffManagetime')->where($where)->delete();
+            $res2 = Db::table('staff_managetime')->where($where)->delete();
             if($res2){
                 return returnApi(10,'已解除','');
             }else{
@@ -144,7 +144,7 @@ class TimeManagement extends Controller{
         }else{
             $data = $where;
             $data['create_time'] = date('Y-m-d H:i:s');
-            $res = Db::table('staffManagetime')->insert($data);
+            $res = Db::table('staff_managetime')->insert($data);
             if($res){
                 return returnApi(0,'已锁定','');
             }else{

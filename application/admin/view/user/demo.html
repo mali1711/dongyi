@@ -1,0 +1,48 @@
+<template>
+    <view class="content">
+        <view class="address">
+            <view>{{detailinfo.address_contacts}}</view>
+            <view>{{detailinfo.address_mobile}}</view>
+            <view>{{detailinfo.address}}</view>
+        </view>
+        <view class="address-content">
+            <img class="projectImg" :src="srcPath+'/uploads/'+detailinfo.pr_info.photo" alt="">
+            <view class="address-content-desc">
+                <view class="prname">
+                    <text class="protitle">项目名称:</text>
+                    <text class="proname">中医推拿</text>
+                </view>
+                <view class="prname">
+                    <text class="protitle">{{detailinfo.pr_info.title}}</text>
+                    <text class="proname">¥{{detailinfo.total_price}}</text>
+                </view>
+            </view>
+        </view>
+        <view class="address-content">
+            <img class="projectImg" :src="srcPath+'/uploads/'+detailinfo.st_info.pic_1" alt="">
+            <view class="address-content-desc">
+                <view class="prname">
+                    <text class="protitle">{{detailinfo.subtime}}:</text>
+                    <text class="proname">{{detailinfo.st_info.name}}</text>
+                </view>
+                <view class="prname">
+                    <text class="protitle">预约时间:</text>
+                    <text class="proname">02-11 23:00:00</text>
+                </view>
+            </view>
+        </view>
+        <!-- 		<view class="address-content">
+                    <view class="jiagouxinxi">
+                        当前加购信息 &nbsp;&nbsp;&nbsp;&nbsp;¥50 x 2 <text class="zongjiagou">=¥100</text>
+                    </view>
+                </view> -->
+        <view class="sunui">
+            <view class="sunui-title">加价简介：最急最低加价数量2，单价¥50，每次加价20分钟,<text>当前已经加购数量{{totalnum}}个</text></view>
+            <view class="jiagou-border" v-if="detailinfo.status!=2">
+                <sunui-stepper unactive="#ddd" active="#19A15F" :label='0' :val="2" :max="10" :min="2" :step="2" @change="stepper"></sunui-stepper>
+                <button class="jiagou" @click="jiagou()" type="warn">加购</button>
+            </view>
+        </view>
+        <button v-if="detailinfo.status==1" @click="complete()" type="primary">确认完成</button>
+    </view>
+</template>
