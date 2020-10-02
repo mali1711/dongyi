@@ -25,9 +25,8 @@ class Order extends Base
     {
 
         //
-
+        $data = $request->post('');
         Db::startTrans();
-        $data = $request->post();
         $data['user_id'] = $request->post('user_id');
         $data['st_id'] = $request->post('st_id');
         $data['pr_id'] = $request->post('pr_id');
@@ -46,7 +45,12 @@ class Order extends Base
         $data['address'] = $request->post('address');//地址
         $data['address_contacts'] = $request->post('address_contacts');//联系人
         $data['address_mobile'] = $request->post('address_mobile');//手机号
-        $data['subsidy'] = 0;//路费补助
+        $i = date('i',$data['subtime']);
+        if($i>20){
+            $data['subsidy'] = 100;//路费补助
+        }else{
+            $data['subsidy'] = 10;//路费补助
+        }
         $data['total_price'] = $pr_info['price'];//订单总价,不含加价
         $balance = Db::table('balance')->where('users_id',$data['user_id'])->find()['balance'];
         if($balance<$data['total_price']){
@@ -54,7 +58,7 @@ class Order extends Base
         }else{
             $baresult = Db::table('balance')->where('users_id',$data['user_id'])->setDec('balance',$data['total_price']);
         }
-        if($baresult != 1){
+        if(!$baresult){
             $result = array(
                 'msg'=>'余额不足',
                 'err'=>10005,
@@ -62,7 +66,7 @@ class Order extends Base
             Db::rollback();
         }else{
             $res = Db::table('order')->insert($data);
-            ManageTime::getloctTime($data['st_id'],$data['subtime'],4);
+            ManageTime::loctTime($data['st_id'],$data['subtime'],3);
             if($res){
                 Db::table('staff')->where('st_id',$data['st_id'])->setInc('order_number',1);
                 $result = array(

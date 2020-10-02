@@ -55,6 +55,7 @@ Route::group('api', function () {
     Route::controller('/managetime', 'api/ManageTime');//时间管理
     Route::controller('/sms', 'api/Sms');//短信验证
     Route::controller('/api', 'api/Pay');//支付
+    Route::controller('/version', 'api/Version');// 版本信息
 });
 
 /**

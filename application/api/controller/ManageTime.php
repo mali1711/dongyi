@@ -68,7 +68,24 @@ class ManageTime extends Controller{
         return array_merge($timelist1,$timelist2);
     }
 
-
+    /**
+     *
+     * @param $stId 技师id
+     * @param $startTime 开始时间
+     * @param $lockTime 结束时间
+     * @author mali
+     * @date 2020/9/30 11:33 下午
+     */
+    static public function loctTime($stId,$startTime,$lockTime)
+    {
+        $data = array();
+        for ($i=0;$i<$lockTime;$i++){
+            $data[$i]['st_id'] = $stId;
+            $data[$i]['lockingtime'] = date('Y-m-d H:i:s',$startTime + (3600*($i+1)));
+            $data[$i]['create_time'] = date('Y-m-d H:i:s');
+        }
+        Db::table('staff_managetime')->insertAll($data);
+    }
 
     /**
      * 获取当天日期
@@ -125,7 +142,7 @@ class ManageTime extends Controller{
      * @author mali
      * @date 2020/9/28 2:27 下午
      */
-    static function getloctTime($st_id='',$startTime='',$Locktime='')
+    static function octTime($st_id='',$startTime='',$Locktime='')
     {
         $data = array();
         $st_id = 1;

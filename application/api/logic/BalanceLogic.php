@@ -28,7 +28,7 @@ class BalanceLogic
      */
     static public function deductBalance($userId,$balance)
     {
-        $current = Db::table('balance')->where('users_id',1)->value('balance');
+        $current = Db::table('balance')->where('users_id',$userId)->value('balance');
         if($current<$balance)return array('code'=>3004,'msg'=>'余额不足');
         $baresult = Db::table('balance')->where('users_id',$userId)->setDec('balance',$balance);
         if($baresult){

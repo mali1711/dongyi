@@ -88,7 +88,7 @@ class Staff extends Controller
      * @param string $lat2 距离二的纬度
      * @return float|int
      */
-    protected  function _distance($lng1='116.12848900000000000', $lat1='35.76238700000000000', $lng2='116.111529', $lat2='35.79448')
+    protected  function _distance($lng1='', $lat1='', $lng2='', $lat2='')
     {
         //将角度转为狐度
         $radLat1 = deg2rad($lat1);//deg2rad()函数将角度转换为弧度
