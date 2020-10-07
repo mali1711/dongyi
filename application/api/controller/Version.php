@@ -19,7 +19,7 @@ class Version extends Base
             'latestVersion'=> '1.0',//最新版本
             'currentVersionStatus'=>true,//当前版本是否可用
             'updateInformation'=>'',//版本更新信息
-            'androidUrl'=>'http://resources.sir6.cn/dongyi1.08.apk',//版本更新地址
+            'androidUrl'=>'http://resources.sir6.cn/dongyi1.09.apk',//版本更新地址
 
         );
         return self::showReturnCode('200',$data,'更新信息获取成功');
@@ -36,7 +36,7 @@ class Version extends Base
             'latestVersion'=> '1.0',//最新版本
             'currentVersionStatus'=>true,//当前版本是否可用
             'updateInformation'=>'',//版本更新信息
-            'iosUrl'=>'http://resources.sir6.cn/dongyi1.08.apk'//版本更新地址
+            'iosUrl'=>'http://resources.sir6.cn/dongyi1.09.apk'//版本更新地址
 
         );
         return self::showReturnCode('200',$data,'更新信息获取成功');
@@ -49,11 +49,11 @@ class Version extends Base
     public function getandroidAndIos(Request $request)
     {
         $data = array(
-            'latestVersion'=> '1.0',//最新版本
-            'currentVersionStatus'=>true,//当前版本是否可用
-            'updateInformation'=>'',//版本更新信息
-            'androidUrl'=>'http://resources.sir6.cn/dongyi1.08.apk',//版本更新地址
-            'iosUrl'=>'http://resources.sir6.cn/dongyi1.08.apk'//版本更新地址
+            'latestVersion'=> '1.0.6',//最新版本
+            'currentVersionStatus'=>false,//当前版本是否可用
+            'updateInformation'=>"1.首页优化\n2.用户订单详情展示优化",//版本更新信息
+            'androidUrl'=>'http://resources.sir6.cn/dongYang106.apk',//版本更新地址
+            'iosUrl'=>'http://resources.sir6.cn/dongyi1.0.6.apk'//版本更新地址
 
         );
         return self::showReturnCode('200',$data,'更新信息获取成功');
