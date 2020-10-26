@@ -39,7 +39,8 @@
     </div>
 </div>
 <div class="layui-btn-group" id="addSatff" style="display:none;">
-    <button type="button" class="layui-btn" lay-event="add">增加</button>
+    <button class="layui-btn" onclick="xadmin.open('添加项目','/admin/staff/create',900,700)">
+        <i class="layui-icon"></i>添加</button></div>
 </div>
 <div type="text/html" id="titleTpl" style="display: none;">
     <img id="pic" style="width: 120px;position: relative;"  src="/uploads/{{d.pic_1}}" />
