@@ -4,9 +4,20 @@ namespace app\common\controller;
 
 use think\Controller;
 use think\Request;
-
+use Qiniu\Storage\UploadManager;
+use Qiniu\Auth;
 class Upload extends Controller
 {
+
+    protected $accessKey = 'ySCej83DBr7F6AJvWbJVVi0qtr1BAAgGzR4IFZxB';
+
+    protected $secretKey = 'VOUu7YsBGmAGPDkiB9GHcuZDzX8fdizY1k6VIV84';
+
+    /**
+     * @var string
+     * 空间存储名称
+     */
+    protected $bucket = 'sir6';
     /**
      * 显示资源列表
      *
@@ -36,6 +47,9 @@ class Upload extends Controller
     public function save(Request $request)
     {
         //
+        $uploadMgr = new UploadManager();
+        $auth = new Auth($accessKey, $secretKey);
+        $token = $auth->uploadToken($bucket);
     }
 
     /**

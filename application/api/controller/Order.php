@@ -200,7 +200,7 @@ class Order extends Base
 
         if($res){
             $total = floatval($data['total_price']);
-            $total = 0.01;
+            //$total = 0.01;
             $out_trade_no = $data['order_number'];
             $foo = new \AliPay();
             $notify_url = Request::instance()->domain().'/api/order/aliPayNotify';
@@ -299,7 +299,7 @@ class Order extends Base
         $data['address_contacts'] = $request->post('address_contacts');//联系人
         $data['address_mobile'] = $request->post('address_mobile');//手机号
         $data['order_number'] = date('YmdHis').rand(100,999);
-        $data['subsidy'] = 0;//路费补助
+        $data['subsidy'] = 100;//路费补助
         $data['total_price'] = $pr_info['price'];//订单总价,不含加价
         return $data;
     }
