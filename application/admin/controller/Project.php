@@ -40,14 +40,13 @@ class Project extends Common
     {
         //
         $data = $request->post();
-        $res = $this->uploadImg('file','project');
-        $data['photo'] = 'project/'.$res->getSaveName();
         $data['create_time'] = date('Y-m-d H:i:s');
+        unset($data['_method']);
         $result = Db::table('project')->insert($data);
         if($result){
-            return 0;
-        }else{
             return 1;
+        }else{
+            return 0;
         }
     }
 

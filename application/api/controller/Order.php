@@ -161,7 +161,6 @@ class Order extends Base
         if($bresult['code']!=200){
             Db::rollback();
             return self::showReturnCodeWithOutData($bresult['code']);
-
         }
         $res = Db::table('order')->where($where)->setInc('add_purchase_num',$add_purchase_num);
         $add_purchase_num+=$add_purchase_num;//加购完以后的数量
