@@ -42,9 +42,7 @@ class Order extends Base
         $data['add_purchase_desc'] = $pr_info['add_purchase_desc'];//加购简介
         $data['add_purchase_price'] = $pr_info['add_purchase_price'];//加购单价
         $data['add_purchase_tprice'] = 0;//加购总价
-        $data['address'] = $request->post('address');//地址
-        $data['address_contacts'] = $request->post('address_contacts');//联系人
-        $data['address_mobile'] = $request->post('address_mobile');//手机号
+        $data = array_merge($data,$this->getAddress($request->post('user_id')));
         $i = date('i',$data['subtime']);
         if($i>20){
             $data['subsidy'] = 100;//路费补助
@@ -65,6 +63,7 @@ class Order extends Base
             );
             Db::rollback();
         }else{
+            $data['status'] = 0;
             $res = Db::table('order')->insert($data);
             ManageTime::loctTime($data['st_id'],$data['subtime'],3);
             if($res){
@@ -294,9 +293,7 @@ class Order extends Base
         $data['add_purchase_desc'] = $pr_info['add_purchase_desc'];//加购简介
         $data['add_purchase_price'] = $pr_info['add_purchase_price'];//加购单价
         $data['add_purchase_tprice'] = 0;//加购总价
-        $data['address'] = $request->post('address');//地址
-        $data['address_contacts'] = $request->post('address_contacts');//联系人
-        $data['address_mobile'] = $request->post('address_mobile');//手机号
+        $data = array_merge($data,$this->getAddress($request->post('user_id')));
         $data['order_number'] = date('YmdHis').rand(100,999);
         $i = date('i',$data['subtime']);
         if($i>20){
@@ -306,5 +303,25 @@ class Order extends Base
         }
         $data['total_price'] = $pr_info['price']+$data['subsidy'] ;//订单总价,不含加价
         return $data;
+    }
+
+    public function getAddress($user_id)
+    {
+        $result = Db::name('address')->where('user_id','=',$user_id)->find();
+        $data['address'] = $result['address'].$result['detailed'];
+        $data['address_contacts'] = $result['name'];
+        $data['address_mobile'] = $result['mobile'];
+        return $data;
+    }
+
+    public function getupdateOrderStatus($order_id)
+    {
+        $res = Db::name('order')->where('order_id','=',$order_id)->update(['status'=>2]);
+        if($res){
+            return self::showReturnCodeWithOutData(200,'',(object)[]);
+        }else{
+            return self::showReturnCodeWithOutData(300,'操作失败',(object)[]);
+        }
+
     }
 }
